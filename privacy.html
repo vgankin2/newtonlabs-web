@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Policy — Cadence</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --green: #0a8c26;
+            --green-light: #e6f5ea;
+            --black: #1a1a1a;
+            --gray-1: #f5f5f7;
+            --gray-2: #e8e8e8;
+            --gray-3: #888;
+            --max-w: 1080px;
+            --nav-h: 60px;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+            background: #fff;
+            color: var(--black);
+            line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        a { color: inherit; text-decoration: none; }
+
+        /* ── NAV ── */
+        nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(255,255,255,0.92);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--gray-2);
+            height: var(--nav-h);
+        }
+
+        .nav-inner {
+            max-width: var(--max-w);
+            margin: 0 auto;
+            padding: 0 24px;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+
+        .logo-mark {
+            width: 32px;
+            height: 32px;
+            background: var(--black);
+            border-radius: 7px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-weight: 700;
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+
+        .nav-brand-name {
+            font-size: 17px;
+            font-weight: 700;
+            letter-spacing: -0.3px;
+            color: var(--black);
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 32px;
+            list-style: none;
+        }
+
+        .nav-links a { font-size: 15px; color: var(--gray-3); transition: color 0.15s; }
+        .nav-links a:hover { color: var(--black); }
+
+        .nav-cta {
+            background: var(--black) !important;
+            color: #fff !important;
+            font-size: 14px !important;
+            font-weight: 600 !important;
+            padding: 8px 18px;
+            border-radius: 980px;
+            transition: background 0.15s !important;
+        }
+
+        .nav-cta:hover { background: #333 !important; }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            padding: 4px;
+            background: none;
+            border: none;
+        }
+
+        .hamburger span {
+            display: block;
+            width: 22px;
+            height: 2px;
+            background: var(--black);
+            border-radius: 2px;
+        }
+
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: var(--nav-h);
+            left: 0; right: 0;
+            background: #fff;
+            border-bottom: 1px solid var(--gray-2);
+            padding: 16px 24px 24px;
+            z-index: 99;
+            flex-direction: column;
+        }
+
+        .mobile-menu.open { display: flex; }
+
+        .mobile-menu a {
+            display: block;
+            padding: 14px 0;
+            font-size: 17px;
+            border-bottom: 1px solid var(--gray-2);
+            color: var(--black);
+        }
+
+        .mobile-menu a:last-child { border-bottom: none; }
+
+        /* ── CONTENT ── */
+        main {
+            max-width: 680px;
+            margin: 0 auto;
+            padding: 56px 24px 80px;
+        }
+
+        .page-label {
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--green);
+            margin-bottom: 12px;
+        }
+
+        h1 {
+            font-size: 32px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            margin-bottom: 8px;
+            line-height: 1.2;
+        }
+
+        .updated { font-size: 14px; color: var(--gray-3); margin-bottom: 48px; }
+
+        .intro {
+            font-size: 17px;
+            color: #333;
+            margin-bottom: 48px;
+            padding: 20px 24px;
+            background: var(--gray-1);
+            border-radius: 12px;
+            line-height: 1.6;
+        }
+
+        h2 {
+            font-size: 19px;
+            font-weight: 650;
+            margin-bottom: 12px;
+            margin-top: 40px;
+            color: var(--black);
+        }
+
+        p { font-size: 16px; color: #333; margin-bottom: 16px; }
+
+        ul { margin: 8px 0 16px 0; padding-left: 20px; }
+        li { font-size: 16px; color: #333; margin-bottom: 8px; }
+
+        .divider { border: none; border-top: 1px solid var(--gray-2); margin: 40px 0; }
+
+        a.text-link { color: var(--green); }
+        a.text-link:hover { text-decoration: underline; }
+
+        /* ── FOOTER ── */
+        footer { padding: 32px 24px; border-top: 1px solid var(--gray-2); }
+
+        .footer-inner {
+            max-width: var(--max-w);
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .footer-brand {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--black);
+        }
+
+        .footer-logo {
+            width: 24px;
+            height: 24px;
+            background: var(--black);
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .footer-links { display: flex; gap: 24px; list-style: none; }
+        .footer-links a { font-size: 13px; color: var(--gray-3); transition: color 0.15s; }
+        .footer-links a:hover { color: var(--black); }
+        .footer-copy { font-size: 13px; color: var(--gray-3); }
+
+        /* ── DARK MODE ── */
+        @media (prefers-color-scheme: dark) {
+            body { background: #111; color: #f0f0f0; }
+            nav { background: rgba(17,17,17,0.92); border-color: #2a2a2a; }
+            .logo-mark { background: #fff; color: #000; }
+            .nav-brand-name { color: #f0f0f0; }
+            .nav-links a { color: #888; }
+            .nav-links a:hover { color: #f0f0f0; }
+            .nav-cta { background: #fff !important; color: #000 !important; }
+            .hamburger span { background: #f0f0f0; }
+            .mobile-menu { background: #111; border-color: #2a2a2a; }
+            .mobile-menu a { color: #f0f0f0; border-color: #2a2a2a; }
+            .intro { background: #1c1c1e; color: #d0d0d0; }
+            h1, h2 { color: #f0f0f0; }
+            p, li { color: #c0c0c0; }
+            .divider { border-color: #2a2a2a; }
+            footer { border-color: #2a2a2a; }
+            .footer-logo { background: #fff; color: #000; }
+            .footer-brand { color: #f0f0f0; }
+            .footer-copy, .footer-links a { color: #555; }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .hamburger { display: flex; }
+        }
+
+        @media (max-width: 540px) {
+            .footer-inner { flex-direction: column; align-items: flex-start; gap: 16px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav>
+    <div class="nav-inner">
+        <a href="index.html" class="nav-brand">
+            <div class="logo-mark">C</div>
+            <span class="nav-brand-name">Cadence</span>
+        </a>
+        <ul class="nav-links">
+            <li><a href="index.html#features">Features</a></li>
+            <li><a href="index.html#screenshots">Screenshots</a></li>
+            <li><a href="index.html#whats-next">What's Next</a></li>
+            <li><a href="index.html#faq">FAQ</a></li>
+            <li><a href="support.html">Support</a></li>
+            <li><a href="index.html#download" class="nav-cta">Download</a></li>
+        </ul>
+        <button class="hamburger" aria-label="Menu" onclick="toggleMenu()">
+            <span></span><span></span><span></span>
+        </button>
+    </div>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+    <a href="index.html" onclick="toggleMenu()">Home</a>
+    <a href="index.html#features" onclick="toggleMenu()">Features</a>
+    <a href="index.html#screenshots" onclick="toggleMenu()">Screenshots</a>
+    <a href="index.html#whats-next" onclick="toggleMenu()">What's Next</a>
+    <a href="index.html#faq" onclick="toggleMenu()">FAQ</a>
+    <a href="support.html" onclick="toggleMenu()">Support</a>
+    <a href="index.html#download" onclick="toggleMenu()">Download</a>
+</div>
+
+<main>
+    <div class="page-label">Legal</div>
+    <h1>Privacy Policy</h1>
+    <p class="updated">Last updated: April 2026</p>
+
+    <div class="intro">
+        Cadence is built on a simple principle: your health data belongs to you. We do not collect it, sell it, or share it with anyone.
+    </div>
+
+    <h2>What data Cadence accesses</h2>
+    <p>Cadence reads step count, walking and running distance, and flights climbed from Apple Health on your device. This data is used solely to display your activity within the app.</p>
+    <p>Cadence never writes to Apple Health and never modifies your Health data in any way.</p>
+
+    <h2>Where your data lives</h2>
+    <p>All health data and activity history is stored in two places:</p>
+    <ul>
+        <li><strong>On your device</strong> — in the app's private document storage, accessible only to Cadence.</li>
+        <li><strong>In your private iCloud</strong> — if you are signed into iCloud, Cadence uses Apple's CloudKit to sync your history and settings across your own devices. This data is stored in your personal iCloud account and is never accessible to Newton Labs or any third party.</li>
+    </ul>
+
+    <h2>Data we do not collect</h2>
+    <p>Newton Labs does not operate any servers, does not collect analytics, and does not receive any personal data from Cadence. Specifically:</p>
+    <ul>
+        <li>No names, email addresses, or account information</li>
+        <li>No location data</li>
+        <li>No health or fitness data</li>
+        <li>No usage analytics or crash reporting sent to us</li>
+        <li>No advertising identifiers</li>
+    </ul>
+
+    <h2>Tip jar purchases</h2>
+    <p>Cadence offers an optional tip jar through Apple's in-app purchase system (StoreKit). All payment processing is handled entirely by Apple. Newton Labs never receives, stores, or processes any payment information or personal details associated with a purchase.</p>
+
+    <h2>Apple Health permissions</h2>
+    <p>Cadence requests read-only access to Steps, Walking + Running Distance, and Flights Climbed in Apple Health. You can review and revoke these permissions at any time in:</p>
+    <p><strong>Settings → Privacy & Security → Health → Cadence</strong></p>
+
+    <h2>Children's privacy</h2>
+    <p>Cadence does not knowingly collect any data from children under the age of 13. As noted above, the app does not collect personal data from any user regardless of age.</p>
+
+    <h2>Changes to this policy</h2>
+    <p>If we make material changes to this privacy policy, we will update the date at the top of this page.</p>
+
+    <hr class="divider">
+
+    <h2>Contact</h2>
+    <p>If you have any questions about this privacy policy, please reach out:</p>
+    <p><a href="mailto:support@newtonlabs.app" class="text-link">support@newtonlabs.app</a></p>
+</main>
+
+<!-- ── FOOTER ── -->
+<footer>
+    <div class="footer-inner">
+        <div class="footer-brand">
+            <div class="footer-logo">C</div>
+            Cadence — Newton Labs
+        </div>
+        <ul class="footer-links">
+            <li><a href="privacy.html">Privacy Policy</a></li>
+            <li><a href="support.html">Support</a></li>
+        </ul>
+        <span class="footer-copy">© 2026 Newton Labs</span>
+    </div>
+</footer>
+
+<script>
+    function toggleMenu() {
+        document.getElementById('mobileMenu').classList.toggle('open');
+    }
+    document.addEventListener('click', function(e) {
+        const menu = document.getElementById('mobileMenu');
+        const nav = document.querySelector('nav');
+        if (menu.classList.contains('open') && !nav.contains(e.target)) {
+            menu.classList.remove('open');
+        }
+    });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Support — Cadence</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --green: #0a8c26;
+            --green-light: #e6f5ea;
+            --black: #1a1a1a;
+            --gray-1: #f5f5f7;
+            --gray-2: #e8e8e8;
+            --gray-3: #888;
+            --max-w: 1080px;
+            --nav-h: 60px;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+            background: #fff;
+            color: var(--black);
+            line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        a { color: inherit; text-decoration: none; }
+
+        /* ── NAV ── */
+        nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(255,255,255,0.92);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--gray-2);
+            height: var(--nav-h);
+        }
+
+        .nav-inner {
+            max-width: var(--max-w);
+            margin: 0 auto;
+            padding: 0 24px;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+
+        .logo-mark {
+            width: 32px;
+            height: 32px;
+            background: var(--black);
+            border-radius: 7px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-weight: 700;
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+
+        .nav-brand-name {
+            font-size: 17px;
+            font-weight: 700;
+            letter-spacing: -0.3px;
+            color: var(--black);
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 32px;
+            list-style: none;
+        }
+
+        .nav-links a { font-size: 15px; color: var(--gray-3); transition: color 0.15s; }
+        .nav-links a:hover { color: var(--black); }
+
+        .nav-cta {
+            background: var(--black) !important;
+            color: #fff !important;
+            font-size: 14px !important;
+            font-weight: 600 !important;
+            padding: 8px 18px;
+            border-radius: 980px;
+            transition: background 0.15s !important;
+        }
+
+        .nav-cta:hover { background: #333 !important; }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            padding: 4px;
+            background: none;
+            border: none;
+        }
+
+        .hamburger span {
+            display: block;
+            width: 22px;
+            height: 2px;
+            background: var(--black);
+            border-radius: 2px;
+        }
+
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: var(--nav-h);
+            left: 0; right: 0;
+            background: #fff;
+            border-bottom: 1px solid var(--gray-2);
+            padding: 16px 24px 24px;
+            z-index: 99;
+            flex-direction: column;
+        }
+
+        .mobile-menu.open { display: flex; }
+
+        .mobile-menu a {
+            display: block;
+            padding: 14px 0;
+            font-size: 17px;
+            border-bottom: 1px solid var(--gray-2);
+            color: var(--black);
+        }
+
+        .mobile-menu a:last-child { border-bottom: none; }
+
+        /* ── CONTENT ── */
+        main {
+            max-width: 680px;
+            margin: 0 auto;
+            padding: 56px 24px 80px;
+        }
+
+        .page-label {
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--green);
+            margin-bottom: 12px;
+        }
+
+        h1 {
+            font-size: 32px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            margin-bottom: 8px;
+            line-height: 1.2;
+        }
+
+        .subtitle { font-size: 17px; color: #555; margin-bottom: 48px; }
+
+        h2 {
+            font-size: 19px;
+            font-weight: 650;
+            margin-bottom: 12px;
+            margin-top: 40px;
+            color: var(--black);
+        }
+
+        p { font-size: 16px; color: #333; margin-bottom: 16px; }
+
+        .faq-item { border-bottom: 1px solid var(--gray-2); }
+        .faq-item:first-child { border-top: 1px solid var(--gray-2); }
+
+        .faq-q {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--black);
+            margin-bottom: 8px;
+            padding: 20px 0 0;
+        }
+
+        .faq-a {
+            font-size: 15px;
+            color: #444;
+            margin: 0;
+            line-height: 1.6;
+            padding-bottom: 20px;
+        }
+
+        .contact-box {
+            margin-top: 48px;
+            padding: 28px 32px;
+            background: var(--gray-1);
+            border-radius: 16px;
+            text-align: center;
+        }
+
+        .contact-box h2 { margin-top: 0; margin-bottom: 8px; }
+        .contact-box p { color: #555; margin-bottom: 20px; }
+
+        .contact-link {
+            display: inline-block;
+            background: var(--black);
+            color: #fff;
+            font-size: 15px;
+            font-weight: 600;
+            padding: 12px 28px;
+            border-radius: 980px;
+            text-decoration: none;
+            transition: background 0.15s;
+        }
+
+        .contact-link:hover { background: #333; }
+
+        a.text-link { color: var(--green); }
+        a.text-link:hover { text-decoration: underline; }
+
+        /* ── FOOTER ── */
+        footer { padding: 32px 24px; border-top: 1px solid var(--gray-2); }
+
+        .footer-inner {
+            max-width: var(--max-w);
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .footer-brand {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--black);
+        }
+
+        .footer-logo {
+            width: 24px;
+            height: 24px;
+            background: var(--black);
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .footer-links { display: flex; gap: 24px; list-style: none; }
+        .footer-links a { font-size: 13px; color: var(--gray-3); transition: color 0.15s; }
+        .footer-links a:hover { color: var(--black); }
+        .footer-copy { font-size: 13px; color: var(--gray-3); }
+
+        /* ── DARK MODE ── */
+        @media (prefers-color-scheme: dark) {
+            body { background: #111; color: #f0f0f0; }
+            nav { background: rgba(17,17,17,0.92); border-color: #2a2a2a; }
+            .logo-mark { background: #fff; color: #000; }
+            .nav-brand-name { color: #f0f0f0; }
+            .nav-links a { color: #888; }
+            .nav-links a:hover { color: #f0f0f0; }
+            .nav-cta { background: #fff !important; color: #000 !important; }
+            .hamburger span { background: #f0f0f0; }
+            .mobile-menu { background: #111; border-color: #2a2a2a; }
+            .mobile-menu a { color: #f0f0f0; border-color: #2a2a2a; }
+            h1, h2 { color: #f0f0f0; }
+            .subtitle { color: #888; }
+            p, .faq-a { color: #c0c0c0; }
+            .faq-q { color: #f0f0f0; }
+            .faq-item { border-color: #2a2a2a; }
+            .faq-item:first-child { border-color: #2a2a2a; }
+            .contact-box { background: #1c1c1e; }
+            .contact-box p { color: #888; }
+            .contact-link { background: #fff; color: #000; }
+            .contact-link:hover { background: #ddd; }
+            footer { border-color: #2a2a2a; }
+            .footer-logo { background: #fff; color: #000; }
+            .footer-brand { color: #f0f0f0; }
+            .footer-copy, .footer-links a { color: #555; }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .hamburger { display: flex; }
+        }
+
+        @media (max-width: 540px) {
+            .footer-inner { flex-direction: column; align-items: flex-start; gap: 16px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav>
+    <div class="nav-inner">
+        <a href="index.html" class="nav-brand">
+            <div class="logo-mark">C</div>
+            <span class="nav-brand-name">Cadence</span>
+        </a>
+        <ul class="nav-links">
+            <li><a href="index.html#features">Features</a></li>
+            <li><a href="index.html#screenshots">Screenshots</a></li>
+            <li><a href="index.html#whats-next">What's Next</a></li>
+            <li><a href="index.html#faq">FAQ</a></li>
+            <li><a href="support.html">Support</a></li>
+            <li><a href="index.html#download" class="nav-cta">Download</a></li>
+        </ul>
+        <button class="hamburger" aria-label="Menu" onclick="toggleMenu()">
+            <span></span><span></span><span></span>
+        </button>
+    </div>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+    <a href="index.html" onclick="toggleMenu()">Home</a>
+    <a href="index.html#features" onclick="toggleMenu()">Features</a>
+    <a href="index.html#screenshots" onclick="toggleMenu()">Screenshots</a>
+    <a href="index.html#whats-next" onclick="toggleMenu()">What's Next</a>
+    <a href="index.html#faq" onclick="toggleMenu()">FAQ</a>
+    <a href="support.html" onclick="toggleMenu()">Support</a>
+    <a href="index.html#download" onclick="toggleMenu()">Download</a>
+</div>
+
+<main>
+    <div class="page-label">Help</div>
+    <h1>Support</h1>
+    <p class="subtitle">Cadence — Step Tracker for iPhone and Apple Watch</p>
+
+    <h2>Frequently asked questions</h2>
+
+    <div class="faq-item">
+        <p class="faq-q">Cadence isn't showing my steps. What should I check?</p>
+        <p class="faq-a">Cadence reads step data from Apple Health. Make sure Health access is enabled: go to <strong>Settings → Privacy & Security → Health → Cadence</strong> and confirm Steps, Walking + Running Distance, and Flights Climbed are all turned on. Then open Cadence and your data should appear.</p>
+    </div>
+
+    <div class="faq-item">
+        <p class="faq-q">How do I set separate goals for weekdays and weekends?</p>
+        <p class="faq-a">Open the <strong>Settings</strong> tab in Cadence and use the Weekday Goal and Weekend Goal pickers. Cadence automatically applies the right goal each day based on the day of the week.</p>
+    </div>
+
+    <div class="faq-item">
+        <p class="faq-q">My step history didn't appear after installing. How do I import it?</p>
+        <p class="faq-a">On first launch, Cadence shows an import sheet to bring in your Health history. If you dismissed it, you can trigger a re-import by deleting and reinstalling the app. Your iCloud-synced history will restore automatically on the next launch.</p>
+    </div>
+
+    <div class="faq-item">
+        <p class="faq-q">Will my data transfer to a new iPhone?</p>
+        <p class="faq-a">Yes. As long as you are signed into the same iCloud account, Cadence will automatically restore your full history and settings on a new device when you install the app.</p>
+    </div>
+
+    <div class="faq-item">
+        <p class="faq-q">How do I get goal notifications?</p>
+        <p class="faq-a">Cadence sends a notification when you hit your daily step goal and an optional morning nudge at 9 AM. Notifications are configured during onboarding. To adjust them later, go to <strong>Settings → Notifications</strong> in the Cadence app, or manage them in <strong>iPhone Settings → Notifications → Cadence</strong>.</p>
+    </div>
+
+    <div class="faq-item">
+        <p class="faq-q">Does Cadence work with Apple Watch?</p>
+        <p class="faq-a">Yes. Cadence includes a native Apple Watch app with a 3-page layout showing today's steps and progress, a week chart, and your goal settings. It stays in sync with your iPhone automatically.</p>
+    </div>
+
+    <div class="faq-item">
+        <p class="faq-q">Does Cadence collect or sell my data?</p>
+        <p class="faq-a">No. Cadence does not collect, transmit, or sell any personal or health data. Your data stays on your device and in your private iCloud account. See our <a href="privacy.html" class="text-link">Privacy Policy</a> for full details.</p>
+    </div>
+
+    <div class="faq-item">
+        <p class="faq-q">What is the tip jar?</p>
+        <p class="faq-a">Cadence is free to use with no subscriptions. Core step tracking, the Apple Watch app, and all complications will always be free. The tip jar is an optional way to support development if you find the app valuable. Tips are one-time purchases processed securely by Apple.</p>
+    </div>
+
+    <div class="contact-box">
+        <h2>Still need help?</h2>
+        <p>Send us a message and we'll get back to you as soon as we can.</p>
+        <a href="mailto:support@newtonlabs.app" class="contact-link">Email Support</a>
+    </div>
+</main>
+
+<!-- ── FOOTER ── -->
+<footer>
+    <div class="footer-inner">
+        <div class="footer-brand">
+            <div class="footer-logo">C</div>
+            Cadence — Newton Labs
+        </div>
+        <ul class="footer-links">
+            <li><a href="privacy.html">Privacy Policy</a></li>
+            <li><a href="support.html">Support</a></li>
+        </ul>
+        <span class="footer-copy">© 2026 Newton Labs</span>
+    </div>
+</footer>
+
+<script>
+    function toggleMenu() {
+        document.getElementById('mobileMenu').classList.toggle('open');
+    }
+    document.addEventListener('click', function(e) {
+        const menu = document.getElementById('mobileMenu');
+        const nav = document.querySelector('nav');
+        if (menu.classList.contains('open') && !nav.contains(e.target)) {
+            menu.classList.remove('open');
+        }
+    });
+</script>
+
+</body>
+</html>
