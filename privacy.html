@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Privacy Policy — Cadence</title>
+    <link rel="icon" type="image/png" href="Cadence_icon.png">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -62,15 +63,15 @@
         .logo-mark {
             width: 32px;
             height: 32px;
-            background: var(--black);
             border-radius: 7px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #fff;
-            font-weight: 700;
-            font-size: 16px;
+            overflow: hidden;
             flex-shrink: 0;
+        }
+
+        .logo-mark img {
+            width: 100%;
+            height: 100%;
+            display: block;
         }
 
         .nav-brand-name {
@@ -223,14 +224,15 @@
         .footer-logo {
             width: 24px;
             height: 24px;
-            background: var(--black);
             border-radius: 5px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #fff;
-            font-size: 12px;
-            font-weight: 700;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .footer-logo img {
+            width: 100%;
+            height: 100%;
+            display: block;
         }
 
         .footer-links { display: flex; gap: 24px; list-style: none; }
@@ -255,7 +257,6 @@
             p, li { color: #c0c0c0; }
             .divider { border-color: #2a2a2a; }
             footer { border-color: #2a2a2a; }
-            .footer-logo { background: #fff; color: #000; }
             .footer-brand { color: #f0f0f0; }
             .footer-copy, .footer-links a { color: #555; }
         }
@@ -276,7 +277,7 @@
 <nav>
     <div class="nav-inner">
         <a href="index.html" class="nav-brand">
-            <div class="logo-mark">C</div>
+            <div class="logo-mark"><img src="Cadence_icon.png" alt="Cadence"></div>
             <span class="nav-brand-name">Cadence</span>
         </a>
         <ul class="nav-links">
@@ -357,7 +358,7 @@
 <footer>
     <div class="footer-inner">
         <div class="footer-brand">
-            <div class="footer-logo">C</div>
+            <div class="footer-logo"><img src="Cadence_icon.png" alt="Cadence"></div>
             Cadence — Newton Labs
         </div>
         <ul class="footer-links">
