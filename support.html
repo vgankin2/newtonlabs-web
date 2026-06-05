@@ -208,8 +208,8 @@
             text-align: center;
         }
 
-        .contact-box h2 { margin-top: 0; margin-bottom: 8px; }
-        .contact-box p { color: #555; margin-bottom: 20px; }
+        .contact-box h2 { margin-top: 0; }
+        .contact-box p { color: #666; margin-bottom: 20px; }
 
         .contact-link {
             display: inline-block;
@@ -217,16 +217,15 @@
             color: #fff;
             font-size: 15px;
             font-weight: 600;
-            padding: 12px 28px;
+            padding: 12px 24px;
             border-radius: 980px;
-            text-decoration: none;
             transition: background 0.15s;
         }
 
         .contact-link:hover { background: #333; }
 
-        a.text-link { color: var(--green); }
-        a.text-link:hover { text-decoration: underline; }
+        .text-link { color: var(--green); }
+        .text-link:hover { text-decoration: underline; }
 
         /* ── FOOTER ── */
         footer { padding: 32px 24px; border-top: 1px solid var(--gray-2); }
@@ -348,7 +347,7 @@
 
     <div class="faq-item">
         <p class="faq-q">Cadence isn't showing my steps. What should I check?</p>
-        <p class="faq-a">Cadence reads step data from Apple Health. Make sure Health access is enabled: go to <strong>Settings → Privacy & Security → Health → Cadence</strong> and confirm Steps, Walking + Running Distance, Flights Climbed, and Active Energy are all turned on. Then open Cadence and your data should appear.</p>
+        <p class="faq-a">Cadence reads step data from Apple Health. Make sure Health access is enabled: go to <strong>Settings → Privacy &amp; Security → Health → Cadence</strong> and confirm Steps, Walking + Running Distance, Flights Climbed, and Active Energy are all turned on. Then open Cadence and your data should appear.</p>
     </div>
 
     <div class="faq-item">
@@ -363,17 +362,22 @@
 
     <div class="faq-item">
         <p class="faq-q">My step history didn't appear after installing. How do I import it?</p>
-        <p class="faq-a">On first launch, Cadence walks you through a setup wizard that imports your full Apple Health history. If you skipped it or need to run it again, go to the <strong>Settings</strong> tab and tap <strong>Setup Cadence Again</strong> in the Data section. This re-runs the wizard and rebuilds your ledger from Health. Your iCloud-synced history will also restore automatically if you are signed into the same iCloud account.</p>
+        <p class="faq-a">On first launch, Cadence walks you through a setup wizard that imports your full Apple Health history. If you skipped it or need to run it again, go to the <strong>Settings</strong> tab and tap <strong>Set Up Cadence Again</strong> in the Data section. This re-runs the wizard and rebuilds your ledger from Health. Your iCloud-synced history will also restore automatically if you are signed into the same iCloud account.</p>
     </div>
 
     <div class="faq-item">
-        <p class="faq-q">Will my data transfer to a new iPhone?</p>
-        <p class="faq-a">Yes. As long as you are signed into the same iCloud account, Cadence will automatically restore your full history and settings on a new device when you install the app.</p>
-    </div>    
+        <p class="faq-q">What does "Set Up Cadence Again" do?</p>
+        <p class="faq-a">"Set Up Cadence Again" in the <strong>Settings → Data</strong> section re-runs the Cadence setup wizard. Use it if you want to re-import your step history from Apple Health, update your goals, or reconfigure your notification preferences. Your existing step history and ledger are never affected — the wizard only adds or updates, never deletes. It's safe to run at any time.</p>
+    </div>
     
     <div class="faq-item">
+        <p class="faq-q">Will my data transfer to a new iPhone?</p>
+        <p class="faq-a">Yes. As long as you are signed into the same iCloud account, Cadence will automatically restore your full history and settings on a new device when you install the app.</p>
+    </div>
+
+    <div class="faq-item">
         <p class="faq-q">My historical step goals look wrong. Can I change them for all past records?</p>
-        <p class="faq-a">Yes. Go to the <strong>Settings</strong> tab, scroll down to the <strong>Data</strong> section, and tap <strong>Update Historic Goals</strong>. This allows you to choose a weekday goal and a weekend goal that will be applied to every past day — weekdays (Monday–Friday) will use the weekday goal, and weekends (Saturday–Sunday) will use the weekend goal. You’ll be asked to confirm before any changes are made. Note that this only updates the goal each day was measured against. Your actual step counts are never modified.</p>
+        <p class="faq-a">Yes. Go to the <strong>Settings</strong> tab, scroll down to the <strong>Data</strong> section, and tap <strong>Update Historic Goals</strong>. This allows you to choose a weekday goal and a weekend goal that will be applied to every past day — weekdays (Monday–Friday) will use the weekday goal, and weekends (Saturday–Sunday) will use the weekend goal. You'll be asked to confirm before any changes are made. Note that this only updates the goal each day was measured against. Your actual step counts are never modified.</p>
     </div>
 
     <div class="faq-item">
@@ -383,14 +387,19 @@
 
     <div class="faq-item">
         <p class="faq-q">My Insights tab or other data looks incomplete after installing the app.</p>
-        <p class="faq-a">This usually happens if your iCloud data is still downloading in the background after the app first opens.  To fix it, go to the <strong>Settings</strong> tab, scroll to the <strong>Data</strong> section, and tap <strong>Sync from iCloud</strong>. This will pull your full history, goals, and preferences from iCloud and merges them with the data on your device. Your existing local data is never overwritten — only missing records are added.</p>
+        <p class="faq-a">This usually happens if your iCloud data is still downloading in the background after the app first opens. To fix it, go to the <strong>Settings</strong> tab, scroll to the <strong>Data</strong> section, and tap <strong>Sync from iCloud</strong>. This will pull your full history, goals, and preferences from iCloud and merge them with the data on your device. Your existing local data is never overwritten — only missing records are added.</p>
+    </div>
+
+    <div class="faq-item">
+        <p class="faq-q">What is the "On Pace" projected total in the History week view?</p>
+        <p class="faq-a">From Tuesday onward, the History week view shows a projected end-of-week step total based on your current pace. It's calculated by taking your sealed daily totals so far this week and adding your average daily steps multiplied by the remaining days. It only appears for the current week and is hidden on Mondays when there isn't enough data yet.</p>
     </div>
 
     <div class="faq-item">
         <p class="faq-q">How do I get goal notifications?</p>
-        <p class="faq-a">Cadence sends a notification when you hit your daily step goal. You can also enable an optional morning nudge at 9 AM — find the toggle in Cadence Settings. To turn goal notifications on or off, go to iPhone Settings → Notifications → Cadence.</p>
+        <p class="faq-a">Cadence offers two notifications. The <strong>Goal Reached</strong> notification fires once when you hit your daily step goal. The <strong>Morning Nudge</strong> sends a daily reminder at 9 AM with your goal for that day — weekday and weekend goals are shown correctly for each day type. Both can be toggled in Cadence's <strong>Settings</strong> tab. To manage notification permissions, go to <strong>iPhone Settings → Notifications → Cadence</strong>.</p>
     </div>
-    
+
     <div class="faq-item">
         <p class="faq-q">Does Cadence work with Apple Watch?</p>
         <p class="faq-a">Yes. Cadence includes a native Apple Watch app with a 3-page layout showing today's steps and progress, a week chart, and your goal settings. It stays in sync with your iPhone automatically.</p>

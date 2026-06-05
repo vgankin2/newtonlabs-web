@@ -322,7 +322,6 @@
 
         .screenshots-header { padding: 0 24px; max-width: var(--max-w); margin: 0 auto; }
 
-        /* iPhone row — outside section-inner, unconstrained width for scroll */
         .screenshots-row {
             display: flex;
             flex-wrap: nowrap;
@@ -360,7 +359,6 @@
 
         .screenshot-label { font-size: 13px; color: var(--gray-3); font-weight: 500; }
 
-        /* Watch section — uses section-inner for alignment */
         .watch-section-inner {
             max-width: var(--max-w);
             margin: 0 auto;
@@ -473,7 +471,7 @@
 
         .lightbox-close:hover { background: rgba(255,255,255,0.25); }
 
-        /* ── COMING SOON ── */
+        /* ── WHAT'S NEXT ── */
         #whats-next { background: var(--gray-1); }
 
         .whats-next-grid {
@@ -774,7 +772,6 @@
                     <span class="feature-tag">Bidirectional sync</span>
                 </div>
             </div>
-
             <div class="feature-card">
                 <div class="feature-icon">🔒</div>
                 <div class="feature-title">Private by Design</div>
@@ -791,14 +788,12 @@
 
 <!-- ── SCREENSHOTS ── -->
 <section id="screenshots">
-<!-- Header aligned to max-width -->
     <div class="screenshots-header">
         <div class="section-label">The App</div>
         <h2 class="section-title">Everything you need,<br>nothing you don't</h2>
         <p class="section-sub">Tap any screenshot to enlarge.</p>
     </div>
 
-    <!-- iPhone screenshots — full width scroll, left edge matches header via padding -->
     <div class="screenshots-row" id="iphone-row">
         <div class="screenshot-item" onclick="openLightbox('screenshots/phone-onboarding.png')">
             <img src="screenshots/phone-onboarding.png" alt="Setup Wizard">
@@ -830,7 +825,6 @@
         </div>
     </div>
 
-    <!-- Watch screenshots — aligned to max-width -->
     <div class="watch-section-inner">
         <div class="screenshots-divider">
             <div class="screenshots-divider-line"></div>
@@ -850,6 +844,10 @@
             <div class="watch-screenshot-item" onclick="openLightbox('screenshots/watch-week.png')">
                 <img src="screenshots/watch-week.png" alt="Week">
                 <span class="screenshot-label">Week</span>
+            </div>
+        	<div class="watch-screenshot-item" onclick="openLightbox('screenshots/watch-goals.png')">
+                <img src="screenshots/watch-goals.png" alt="Set Goals">
+                <span class="screenshot-label">Set Goals</span>
             </div>
 
             <div style="margin-left: 16px;">
@@ -889,7 +887,7 @@
                 <div class="whats-next-icon">📆</div>
                 <div>
                     <div class="whats-next-title">Rest Days</div>
-                    <p class="whats-next-desc">Mark planned rest days so they don’t count against your streak or skew your averages. Built for how real life actually works.</p>
+                    <p class="whats-next-desc">Mark planned rest days so they don't count against your streak or skew your averages. Built for how real life actually works.</p>
                     <span class="whats-next-badge">Coming v1.2</span>
                 </div>
             </div>
@@ -897,7 +895,7 @@
                 <div class="whats-next-icon">🏆</div>
                 <div>
                     <div class="whats-next-title">Year in Review</div>
-                    <p class="whats-next-desc">A beautiful yearly summary of your walking journey. Your best days, longest streaks, and how far you’ve come since you started.</p>
+                    <p class="whats-next-desc">A beautiful yearly summary of your walking journey. Your best days, longest streaks, and how far you've come since you started.</p>
                     <span class="whats-next-badge">Coming v1.2</span>
                 </div>
             </div>
@@ -917,7 +915,7 @@
                     Is Cadence really free?
                     <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
                 </button>
-                <div class="faq-answer">Core step tracking, the Apple Watch app, and all complications are free and will always stay free. There's an optional tip jar if you want to support development. Advanced features are planned for a future update, but the full v1.0 experience has no paywalls and no subscription.</div>
+                <div class="faq-answer">Core step tracking, the Apple Watch app, and all complications are free and will always stay free. There's an optional tip jar if you want to support development. Advanced features are planned for a future update, but there are no paywalls and no subscription.</div>
             </div>
 
             <div class="faq-item">
