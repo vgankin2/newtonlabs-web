@@ -354,58 +354,6 @@
         .footer-links a { font-size: 13px; color: var(--gray-3); transition: color 0.15s; }
         .footer-links a:hover { color: var(--black); }
 
-        /* ── DARK MODE ── */
-        @media (prefers-color-scheme: dark) {
-            body { background: #111; color: #f0f0f0; }
-            nav { background: rgba(17,17,17,0.92); border-color: #222; }
-            .nav-name { color: #f0f0f0; }
-            .nav-links a { color: #555; }
-            .nav-links a:hover { color: #f0f0f0; }
-            h1, .section-title, .step-title, .feature-title { color: #f0f0f0; }
-            .hero-sub, .step-desc, .feature-desc { color: #888; }
-            .phone-frame, .screenshot-card, .feature-card, .review-card { background: #1c1c1e; border-color: #2a2a2a; }
-            .screenshot-card .ss-image { background: #222; }
-            .strip { background: #161616; border-color: #222; }
-            .strip-text { color: #f0f0f0; }
-            .screenshots-section { background: #141414; border-color: #222; }
-            .features-grid .feature-card { border-color: #2a2a2a; }
-            .btn-primary { background: #f0f0f0; color: #111; }
-            .btn-primary:hover { background: #ddd; }
-            .reviews { background: #141414; border-color: #222; }
-            .review-card { background: #1c1c1e; border-color: #2a2a2a; }
-            .review-text { color: #bbb; }
-            footer { border-color: #222; }
-            .footer-links a { color: #555; }
-            .footer-links a:hover { color: #f0f0f0; }
-            .download-cta p { color: #888; }
-        }
-
-        /* ── RESPONSIVE ── */
-        @media (max-width: 860px) {
-            .hero { grid-template-columns: 1fr; gap: 48px; padding: 56px 28px 48px; }
-            .hero-visual { order: -1; }
-            h1 { font-size: 40px; }
-            .steps { grid-template-columns: 1fr 1fr; gap: 24px; }
-            .features-grid { grid-template-columns: 1fr 1fr; }
-            .reviews-grid { grid-template-columns: 1fr; }
-            .pro-card { grid-template-columns: 1fr; }
-            .pro-cta-wrap { flex-direction: row; align-items: center; }
-        }
-
-        @media (max-width: 640px) {
-            h1 { font-size: 34px; letter-spacing: -1.5px; }
-            .section-title { font-size: 28px; }
-            .steps { grid-template-columns: 1fr; }
-            .features-grid { grid-template-columns: 1fr; }
-            .pro-card { padding: 36px 28px; }
-            .strip-inner { gap: 24px; }
-            .footer-inner { flex-direction: column; align-items: flex-start; }
-            .nav-links .nav-links-desktop { display: none; }
-        .hamburger { display: flex; }
-        .mobile-menu { background: #fff; border-color: var(--gray-2); }
-        .mobile-menu a { color: var(--black); border-color: var(--gray-2); }
-        }
-
         /* ── HAMBURGER / MOBILE MENU ── */
         .hamburger {
             display: none;
@@ -445,6 +393,59 @@
             text-decoration: none;
         }
         .mobile-menu a:last-child { border-bottom: none; }
+
+        /* ── DARK MODE ── */
+        @media (prefers-color-scheme: dark) {
+            body { background: #111; color: #f0f0f0; }
+            nav { background: rgba(17,17,17,0.92); border-color: #222; }
+            .nav-name { color: #f0f0f0; }
+            .nav-links a { color: #555; }
+            .nav-links a:hover { color: #f0f0f0; }
+            h1, .section-title, .step-title, .feature-title { color: #f0f0f0; }
+            .hero-sub, .step-desc, .feature-desc { color: #888; }
+            .phone-frame, .screenshot-card, .feature-card, .review-card { background: #1c1c1e; border-color: #2a2a2a; }
+            .screenshot-card .ss-image { background: #222; }
+            .strip { background: #161616; border-color: #222; }
+            .strip-text { color: #f0f0f0; }
+            .screenshots-section { background: #141414; border-color: #222; }
+            .features-grid .feature-card { border-color: #2a2a2a; }
+            .btn-primary { background: #f0f0f0; color: #111; }
+            .btn-primary:hover { background: #ddd; }
+            .reviews { background: #141414; border-color: #222; }
+            .review-card { background: #1c1c1e; border-color: #2a2a2a; }
+            .review-text { color: #bbb; }
+            footer { border-color: #222; }
+            .footer-links a { color: #555; }
+            .footer-links a:hover { color: #f0f0f0; }
+            .download-cta p { color: #888; }
+            .hamburger span { background: #f0f0f0; }
+            .mobile-menu { background: #111; border-color: #2a2a2a; }
+            .mobile-menu a { color: #f0f0f0; border-color: #2a2a2a; }
+        }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 860px) {
+            .hero { grid-template-columns: 1fr; gap: 48px; padding: 56px 28px 48px; }
+            .hero-visual { order: -1; }
+            h1 { font-size: 40px; }
+            .steps { grid-template-columns: 1fr 1fr; gap: 24px; }
+            .features-grid { grid-template-columns: 1fr 1fr; }
+            .reviews-grid { grid-template-columns: 1fr; }
+            .pro-card { grid-template-columns: 1fr; }
+            .pro-cta-wrap { flex-direction: row; align-items: center; }
+        }
+
+        @media (max-width: 640px) {
+            h1 { font-size: 34px; letter-spacing: -1.5px; }
+            .section-title { font-size: 28px; }
+            .steps { grid-template-columns: 1fr; }
+            .features-grid { grid-template-columns: 1fr; }
+            .pro-card { padding: 36px 28px; }
+            .strip-inner { gap: 24px; }
+            .footer-inner { flex-direction: column; align-items: flex-start; }
+            .nav-links .nav-links-desktop { display: none; }
+            .hamburger { display: flex; }
+        }
 
         /* ── LIGHTBOX ── */
         .lightbox {
