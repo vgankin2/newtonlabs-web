@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQ — TabCut</title>
+    <link rel="icon" type="image/png" href="tabcut_icon.png">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --accent: #FF6B35;
+            --black: #1a1a1a;
+            --gray-1: #f5f5f7;
+            --gray-2: #e8e8e8;
+            --gray-3: #888;
+            --max-w: 1080px;
+            --nav-h: 64px;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+            background: #fff; color: var(--black); line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        a { color: inherit; text-decoration: none; }
+
+        nav {
+            position: sticky; top: 0; z-index: 100;
+            background: rgba(255,255,255,0.92);
+            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--gray-2); height: var(--nav-h);
+        }
+
+        .nav-inner {
+            max-width: var(--max-w); margin: 0 auto; padding: 0 28px;
+            height: 100%; display: flex; align-items: center; justify-content: space-between;
+        }
+
+        .nav-brand { display: flex; align-items: center; gap: 10px; }
+        .nav-icon { width: 28px; height: 28px; border-radius: 7px; overflow: hidden; flex-shrink: 0; }
+        .nav-icon img { width: 100%; height: 100%; display: block; }
+        .nav-brand-name { font-size: 17px; font-weight: 700; letter-spacing: -0.3px; color: var(--black); }
+
+        .nav-links { display: flex; align-items: center; gap: 28px; }
+        .nav-links a { font-size: 14px; color: var(--gray-3); transition: color 0.15s; }
+        .nav-links a:hover { color: var(--black); }
+        .nav-links a.active { color: var(--black); }
+
+        .nav-cta {
+            display: inline-flex; align-items: center;
+            background: var(--accent); color: #fff;
+            font-size: 14px; font-weight: 600;
+            padding: 8px 18px; border-radius: 980px;
+            transition: opacity 0.15s;
+        }
+        .nav-cta:hover { opacity: 0.85; }
+
+        main { max-width: 720px; margin: 0 auto; padding: 56px 28px 80px; }
+
+        .page-label { font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); margin-bottom: 12px; }
+        h1 { font-size: 36px; font-weight: 700; letter-spacing: -1px; margin-bottom: 16px; line-height: 1.15; }
+        .intro { font-size: 17px; color: #555; margin-bottom: 52px; line-height: 1.65; }
+
+        /* ── FAQ SECTIONS ── */
+        .faq-section { margin-bottom: 48px; }
+        .faq-section-title {
+            font-size: 12px; font-weight: 700; letter-spacing: 0.08em;
+            text-transform: uppercase; color: var(--gray-3);
+            padding-bottom: 12px; border-bottom: 1px solid var(--gray-2);
+            margin-bottom: 0;
+        }
+
+        /* ── ACCORDION ── */
+        details {
+            border-bottom: 1px solid var(--gray-2);
+        }
+
+        summary {
+            list-style: none; cursor: pointer;
+            padding: 18px 0;
+            font-size: 16px; font-weight: 600; color: var(--black);
+            display: flex; justify-content: space-between; align-items: center;
+            gap: 12px;
+            user-select: none;
+        }
+
+        summary::-webkit-details-marker { display: none; }
+
+        summary::after {
+            content: "+";
+            font-size: 20px; font-weight: 300; color: var(--gray-3);
+            flex-shrink: 0; transition: transform 0.2s;
+        }
+
+        details[open] summary::after {
+            content: "−";
+        }
+
+        .answer {
+            padding: 0 0 20px;
+            font-size: 15px; color: #555; line-height: 1.7;
+        }
+
+        .answer p { margin-bottom: 10px; }
+        .answer p:last-child { margin-bottom: 0; }
+        .answer a { color: var(--accent); }
+        .answer a:hover { text-decoration: underline; }
+        .answer strong { color: var(--black); font-weight: 600; }
+
+        .support-cta {
+            margin-top: 48px; background: var(--gray-1);
+            border: 1px solid var(--gray-2); border-radius: 16px;
+            padding: 28px 32px; display: flex; align-items: center;
+            justify-content: space-between; gap: 20px; flex-wrap: wrap;
+        }
+
+        .support-cta-text { font-size: 16px; font-weight: 600; }
+        .support-cta-sub { font-size: 14px; color: var(--gray-3); margin-top: 4px; }
+
+        .support-cta-btn {
+            display: inline-block; background: var(--accent); color: #fff;
+            font-size: 14px; font-weight: 600; padding: 10px 20px;
+            border-radius: 980px; white-space: nowrap; transition: opacity 0.15s;
+        }
+        .support-cta-btn:hover { opacity: 0.85; }
+
+        footer { border-top: 1px solid var(--gray-2); padding: 32px 28px; }
+        .footer-inner { max-width: var(--max-w); margin: 0 auto; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+        .footer-copy { font-size: 13px; color: var(--gray-3); }
+        .footer-links { display: flex; gap: 24px; list-style: none; }
+        .footer-links a { font-size: 13px; color: var(--gray-3); transition: color 0.15s; }
+        .footer-links a:hover { color: var(--black); }
+
+        @media (prefers-color-scheme: dark) {
+            body { background: #111; color: #f0f0f0; }
+            nav { background: rgba(17,17,17,0.92); border-color: #222; }
+            .nav-brand-name { color: #f0f0f0; }
+            .nav-links a { color: #555; }
+            .nav-links a:hover, .nav-links a.active { color: #f0f0f0; }
+            h1 { color: #f0f0f0; }
+            .intro, .answer { color: #888; }
+            .answer strong { color: #f0f0f0; }
+            summary { color: #f0f0f0; }
+            details { border-color: #2a2a2a; }
+            .faq-section-title { border-color: #2a2a2a; color: #555; }
+            .support-cta { background: #1c1c1e; border-color: #2a2a2a; }
+            .support-cta-sub { color: #555; }
+            footer { border-color: #2a2a2a; }
+            .footer-copy, .footer-links a { color: #555; }
+            .footer-links a:hover { color: #f0f0f0; }
+        }
+
+        @media (max-width: 540px) {
+            .footer-inner { flex-direction: column; align-items: flex-start; }
+            .support-cta { flex-direction: column; align-items: flex-start; }
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <div class="nav-inner">
+        <a href="index.html" class="nav-brand">
+            <div class="nav-icon"><img src="tabcut_icon.png" alt="TabCut"></div>
+            <span class="nav-brand-name">TabCut</span>
+        </a>
+        <div class="nav-links">
+            <a href="index.html#how-it-works">How it works</a>
+            <a href="index.html#features">Features</a>
+            <a href="faq.html" class="active">FAQ</a>
+            <a href="support.html">Support</a>
+            <a href="privacy.html">Privacy</a>
+            <a href="../index.html">Newton Labs</a>
+            <a href="index.html#download" class="nav-cta">Download Free</a>
+        </div>
+    </div>
+</nav>
+
+<main>
+    <div class="page-label">Help</div>
+    <h1>Frequently Asked Questions</h1>
+    <p class="intro">Everything you need to know about splitting bills with TabCut.</p>
+
+    <!-- GETTING STARTED -->
+    <div class="faq-section">
+        <div class="faq-section-title">Getting Started</div>
+
+        <details>
+            <summary>How do I start a split?</summary>
+            <div class="answer">
+                <p>Tap <strong>Scan Receipt</strong> or <strong>Enter Manually</strong> on the home screen to start a new split. You'll be taken through the workflow: first add the items from your receipt (by scanning or typing), then add the people at your table, assign items to each person, enter tax and tip, name the venue, and confirm. The whole thing takes under a minute.</p>
+            </div>
+        </details>
+
+        <details>
+            <summary>Do I need to create an account?</summary>
+            <div class="answer">
+                <p>No account needed. TabCut works immediately after download — no sign-up, no email, no password. Your data lives on your device and syncs privately through your own iCloud account.</p>
+            </div>
+        </details>
+
+        <details>
+            <summary>Does TabCut work without an internet connection?</summary>
+            <div class="answer">
+                <p>Yes. Receipt scanning, item entry, assignment, and totals calculation all happen entirely on your iPhone — no internet connection required. You'll need connectivity to send payment requests via Venmo, PayPal, or Cash App, but the splitting itself works fully offline.</p>
+            </div>
+        </details>
+    </div>
+
+    <!-- RECEIPT SCANNING -->
+    <div class="faq-section">
+        <div class="faq-section-title">Receipt Scanning</div>
+
+        <details>
+            <summary>How accurate is the receipt scanner?</summary>
+            <div class="answer">
+                <p>TabCut uses Apple's Vision framework to read receipts directly on your device. It works well on most standard restaurant receipts. For best results: lay the receipt flat, ensure the photo is well-lit and in focus, and make sure the full receipt is in frame. Long or crumpled receipts may need a second scan or minor manual corrections.</p>
+            </div>
+        </details>
+
+        <details>
+            <summary>Is my receipt photo uploaded anywhere?</summary>
+            <div class="answer">
+                <p>No. Receipt scanning is processed entirely on your iPhone using Apple's built-in Vision framework. Your receipt photo is never sent to any server — not ours, not anyone else's. It exists only in the app during the scanning session.</p>
+            </div>
+        </details>
+
+        <details>
+            <summary>Can I add items manually instead of scanning?</summary>
+            <div class="answer">
+                <p>Yes. On the items screen, tap <strong>Add Item</strong> to type in any item manually — name and price. You can mix scanning and manual entry freely, so if the scanner misses an item, just add it by hand.</p>
+            </div>
+        </details>
+
+        <details>
+            <summary>The scanner misread an item — can I fix it?</summary>
+            <div class="answer">
+                <p>Yes. After scanning, all recognized items are displayed in a list before you proceed. Tap any item to edit the name or price, delete items that don't belong, or add ones that were missed.</p>
+            </div>
+        </details>
+    </div>
+
+    <!-- SPLITTING -->
+    <div class="faq-section">
+        <div class="faq-section-title">Splitting</div>
+
+        <details>
+            <summary>How do I add the people I'm dining with?</summary>
+            <div class="answer">
+                <p>On the People screen, tap <strong>Add Person</strong> to type a name, or tap the contacts icon to search and import directly from your address book. You can add as many people as needed.</p>
+            </div>
+        </details>
+
+        <details>
+            <summary>Can multiple people share one item?</summary>
+            <div class="answer">
+                <p>Yes. On the assignment screen, tap an item and select all the people who shared it. TabCut divides the cost evenly among them automatically.</p>
+            </div>
+        </details>
+
+        <details>
+            <summary>How is tax and tip handled?</summary>
+            <div class="answer">
+                <p>After assigning items, you'll enter the tax amount (TabCut can also read it from the receipt) and choose a tip percentage — or enter a custom tip amount. Both are distributed proportionally based on each person's subtotal, so someone who ordered less also pays less tax and tip.</p>
+            </div>
+        </details>
+
+        <details>
+            <summary>Can I designate one person as the bill payer?</summary>
+            <div class="answer">
+                <p>Yes. TabCut supports a bill payer mode where one person fronts the entire tab and everyone else pays them back. Each person's amount is presented as a payment request directed to the bill payer's Venmo, PayPal, or Cash App handle.</p>
+            </div>
+        </details>
+    </div>
+
+    <!-- SHARING & PAYMENT -->
+    <div class="faq-section">
+        <div class="faq-section-title">Sharing &amp; Payment</div>
+
+        <details>
+            <summary>How do I collect payment after splitting?</summary>
+            <div class="answer">
+                <p>After confirming the split, tap any person's name to share their total. You can send a formatted summary by <strong>text message or email</strong>, or tap <strong>Request on Venmo</strong>, <strong>PayPal</strong>, or <strong>Cash App</strong> to open a pre-filled payment request directly in that app.</p>
+            </div>
+        </details>
+
+        <details>
+            <summary>What does the shared summary look like?</summary>
+            <div class="answer">
+                <p>TabCut generates a clean, formatted receipt-style summary that shows each person's items, their subtotal, their share of tax and tip, and the final amount owed. It's designed to be clear at a glance so there's no back-and-forth about what the number includes.</p>
+            </div>
+        </details>
+
+        <details>
+            <summary>How do I set up my Venmo, PayPal, or Cash App handle?</summary>
+            <div class="answer">
+                <p>Go to <strong>TabCut Settings → Payment Handles</strong> and enter your username for each service you use. Once set, TabCut will pre-fill your handle in every payment request so others can pay you directly.</p>
+            </div>
+        </details>
+
+        <details>
+            <summary>Do my friends need to have TabCut installed?</summary>
+            <div class="answer">
+                <p>No. You do all the splitting in TabCut, then share each person's total via text or email. They receive a plain-text summary and can pay you through whichever app they already have — no TabCut download required on their end.</p>
+            </div>
+        </details>
+    </div>
+
+    <!-- HISTORY & PRO -->
+    <div class="faq-section">
+        <div class="faq-section-title">History &amp; TabCut Pro</div>
+
+        <details>
+            <summary>Are my past splits saved?</summary>
+            <div class="answer">
+                <p>Yes. Every completed split is saved to your History automatically. You can browse past bills, see who was there, and reference any previous totals. History is stored in your personal iCloud account and syncs across your devices.</p>
+            </div>
+        </details>
+
+        <details>
+            <summary>What is TabCut Pro?</summary>
+            <div class="answer">
+                <p>TabCut is free to download and includes a few splits to try the app. TabCut Pro unlocks unlimited splits, full access to split history, and the ability to repeat a previous split. It's a single one-time purchase of <strong>$4.99</strong> — no subscription, no renewal.</p>
+            </div>
+        </details>
+
+        <details>
+            <summary>I already bought TabCut Pro — how do I restore it?</summary>
+            <div class="answer">
+                <p>Open TabCut, go to <strong>Settings</strong>, and tap <strong>Restore Purchase</strong>. Make sure you're signed in with the same Apple ID you used when you originally purchased. If you're still having trouble, <a href="support.html">contact support</a>.</p>
+            </div>
+        </details>
+
+        <details>
+            <summary>Can I use TabCut Pro on multiple devices?</summary>
+            <div class="answer">
+                <p>Yes. TabCut Pro is tied to your Apple ID, so any iPhone signed in with the same Apple ID can restore the purchase at no additional cost.</p>
+            </div>
+        </details>
+    </div>
+
+    <div class="support-cta">
+        <div>
+            <div class="support-cta-text">Still have a question?</div>
+            <div class="support-cta-sub">We usually respond within one business day.</div>
+        </div>
+        <a href="support.html" class="support-cta-btn">Contact Support →</a>
+    </div>
+</main>
+
+<footer>
+    <div class="footer-inner">
+        <span class="footer-copy">© 2026 Newton Labs</span>
+        <ul class="footer-links">
+            <li><a href="faq.html">FAQ</a></li>
+            <li><a href="support.html">Support</a></li>
+            <li><a href="privacy.html">Privacy</a></li>
+            <li><a href="../index.html">Newton Labs</a></li>
+        </ul>
+    </div>
+</footer>
+
+</body>
+</html>

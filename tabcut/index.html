@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TabCut — Bill Splitting for iPhone</title>
+    <meta name="description" content="Scan the receipt. Assign items. Everyone pays exactly what they ordered. No account, no subscription, no math.">
+    <link rel="icon" type="image/png" href="tabcut_icon.png">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --accent: #FF6B35;
+            --accent-dark: #e85a24;
+            --black: #1a1a1a;
+            --gray-1: #f5f5f7;
+            --gray-2: #e8e8e8;
+            --gray-3: #888;
+            --max-w: 1080px;
+            --nav-h: 64px;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+            background: #fff;
+            color: var(--black);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        a { color: inherit; text-decoration: none; }
+        img { display: block; }
+
+        /* ── NAV ── */
+        nav {
+            position: sticky; top: 0; z-index: 100;
+            background: rgba(255,255,255,0.92);
+            backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+            border-bottom: 1px solid var(--gray-2);
+            height: var(--nav-h);
+        }
+
+        .nav-inner {
+            max-width: var(--max-w); margin: 0 auto; padding: 0 28px;
+            height: 100%; display: flex; align-items: center; justify-content: space-between;
+        }
+
+        .nav-brand { display: flex; align-items: center; gap: 10px; }
+        .nav-icon { width: 28px; height: 28px; border-radius: 7px; overflow: hidden; }
+        .nav-icon img { width: 100%; height: 100%; }
+        .nav-name { font-size: 17px; font-weight: 700; letter-spacing: -0.3px; }
+
+        .nav-links { display: flex; align-items: center; gap: 28px; }
+        .nav-links a { font-size: 14px; color: var(--gray-3); transition: color 0.15s; }
+        .nav-links a:hover { color: var(--black); }
+
+        .nav-cta {
+            display: inline-flex; align-items: center; gap: 6px;
+            background: var(--accent); color: #fff !important;
+            font-size: 14px; font-weight: 600;
+            padding: 8px 18px; border-radius: 980px;
+            transition: background 0.15s;
+        }
+        .nav-cta:hover { background: var(--accent-dark); }
+
+        /* ── HERO ── */
+        .hero {
+            max-width: var(--max-w); margin: 0 auto;
+            padding: 80px 28px 64px;
+            display: grid; grid-template-columns: 1fr 1fr;
+            gap: 60px; align-items: center;
+        }
+
+        .hero-text {}
+
+        .hero-eyebrow {
+            display: inline-block; font-size: 12px; font-weight: 700;
+            letter-spacing: 0.08em; text-transform: uppercase;
+            color: var(--accent); margin-bottom: 18px;
+        }
+
+        h1 {
+            font-size: 52px; font-weight: 700;
+            letter-spacing: -2.5px; line-height: 1.04;
+            color: var(--black); margin-bottom: 22px;
+        }
+
+        .hero-sub {
+            font-size: 18px; color: #555;
+            line-height: 1.65; margin-bottom: 36px;
+            max-width: 440px;
+        }
+
+        .hero-actions { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+
+        .btn-primary {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: var(--black); color: #fff;
+            font-size: 15px; font-weight: 600;
+            padding: 13px 24px; border-radius: 980px;
+            transition: background 0.15s;
+        }
+        .btn-primary:hover { background: #333; }
+
+        .btn-secondary {
+            font-size: 14px; color: var(--gray-3);
+            border-bottom: 1px solid var(--gray-2);
+            transition: color 0.15s, border-color 0.15s;
+        }
+        .btn-secondary:hover { color: var(--black); border-color: var(--black); }
+
+        .hero-meta {
+            margin-top: 20px; display: flex; align-items: center; gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .hero-meta-item { font-size: 13px; color: var(--gray-3); display: flex; align-items: center; gap: 6px; }
+        .hero-meta-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--gray-2); }
+
+        /* ── HERO PHONE ── */
+        .hero-visual {
+            display: flex; justify-content: center; align-items: flex-end;
+            gap: 16px; padding-bottom: 8px;
+        }
+
+        .phone-frame {
+            background: var(--gray-1); border: 1px solid var(--gray-2);
+            border-radius: 36px; overflow: hidden;
+            position: relative; flex-shrink: 0;
+        }
+
+        .phone-frame.main {
+            width: 200px; height: 430px;
+            box-shadow: 0 24px 64px rgba(0,0,0,0.12), 0 4px 16px rgba(0,0,0,0.06);
+        }
+
+        .phone-frame.secondary {
+            width: 170px; height: 366px;
+            opacity: 0.85;
+            box-shadow: 0 16px 40px rgba(0,0,0,0.08);
+        }
+
+        .phone-frame img { width: 100%; height: 100%; object-fit: cover; }
+
+        /* Screenshot placeholder — swap img src when real screenshots are ready */
+        .screenshot-placeholder {
+            width: 100%; height: 100%;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            gap: 10px; color: var(--gray-3);
+        }
+
+        .screenshot-placeholder svg { opacity: 0.3; }
+        .screenshot-placeholder span { font-size: 11px; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; opacity: 0.5; }
+
+        /* ── STRIP ── */
+        .strip {
+            background: var(--gray-1); border-top: 1px solid var(--gray-2); border-bottom: 1px solid var(--gray-2);
+            padding: 20px 28px;
+        }
+
+        .strip-inner {
+            max-width: var(--max-w); margin: 0 auto;
+            display: flex; justify-content: center; gap: 48px; flex-wrap: wrap;
+        }
+
+        .strip-item { display: flex; align-items: center; gap: 10px; }
+        .strip-icon { font-size: 26px; }
+        .strip-text { font-size: 14px; font-weight: 500; color: var(--black); }
+
+        /* ── HOW IT WORKS ── */
+        .how { max-width: var(--max-w); margin: 0 auto; padding: 96px 28px; }
+
+        .section-label {
+            font-size: 12px; font-weight: 700; letter-spacing: 0.08em;
+            text-transform: uppercase; color: var(--accent); margin-bottom: 14px;
+        }
+
+        .section-title {
+            font-size: 38px; font-weight: 700; letter-spacing: -1.5px;
+            line-height: 1.1; margin-bottom: 56px; max-width: 520px;
+        }
+
+        .steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 28px; }
+
+        .step {}
+        .step-number {
+            width: 36px; height: 36px; border-radius: 10px;
+            background: var(--accent); color: #fff;
+            font-size: 15px; font-weight: 700;
+            display: flex; align-items: center; justify-content: center;
+            margin-bottom: 18px;
+        }
+        .step-title { font-size: 18px; font-weight: 650; letter-spacing: -0.3px; margin-bottom: 10px; }
+        .step-desc { font-size: 15px; color: #555; line-height: 1.6; }
+
+        /* ── SCREENSHOTS ── */
+        .screenshots-section { background: var(--gray-1); border-top: 1px solid var(--gray-2); padding: 80px 0; overflow: hidden; }
+
+        .screenshots-inner { max-width: var(--max-w); margin: 0 auto; padding: 0 28px; margin-bottom: 48px; }
+
+        .screenshots-grid {
+            display: flex; gap: 20px;
+            padding: 0 28px;
+            justify-content: center; flex-wrap: wrap;
+        }
+
+        .screenshot-card {
+            background: #fff; border: 1px solid var(--gray-2);
+            border-radius: 28px; overflow: hidden;
+            width: 180px; flex-shrink: 0;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+        }
+
+        .screenshot-card .ss-image {
+            height: 320px; background: var(--gray-1);
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            gap: 10px; color: var(--gray-3);
+            font-size: 11px; font-weight: 600;
+            letter-spacing: 0.05em; text-transform: uppercase;
+        }
+
+        .screenshot-card img.ss-image {
+            width: 100%; height: 320px;
+            object-fit: cover; object-position: top;
+            display: block;
+        }
+
+        .screenshot-card .ss-image svg { opacity: 0.25; }
+
+        .screenshot-card .ss-label {
+            padding: 12px 14px; font-size: 12px; font-weight: 600;
+            color: var(--gray-3); border-top: 1px solid var(--gray-2);
+            letter-spacing: 0.02em;
+        }
+
+        /* ── FEATURES ── */
+        .features { max-width: var(--max-w); margin: 0 auto; padding: 96px 28px; }
+
+        .features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 56px; }
+
+        .feature-card {
+            border: 1px solid var(--gray-2); border-radius: 20px;
+            padding: 28px 26px;
+        }
+
+        .feature-icon { font-size: 26px; margin-bottom: 14px; }
+        .feature-title { font-size: 16px; font-weight: 650; letter-spacing: -0.2px; margin-bottom: 8px; }
+        .feature-desc { font-size: 14px; color: #555; line-height: 1.6; }
+
+        /* ── PRO ── */
+        .pro-section { max-width: var(--max-w); margin: 0 auto; padding: 0 28px 96px; }
+
+        .pro-card {
+            background: var(--black); color: #fff;
+            border-radius: 28px; padding: 52px 56px;
+            display: grid; grid-template-columns: 1fr auto;
+            gap: 40px; align-items: center;
+        }
+
+        .pro-badge {
+            display: inline-block; font-size: 11px; font-weight: 700;
+            letter-spacing: 0.08em; text-transform: uppercase;
+            background: var(--accent); color: #fff;
+            padding: 4px 12px; border-radius: 980px; margin-bottom: 16px;
+        }
+
+        .pro-title { font-size: 32px; font-weight: 700; letter-spacing: -1px; line-height: 1.1; margin-bottom: 16px; }
+        .pro-desc { font-size: 16px; color: #aaa; line-height: 1.65; margin-bottom: 24px; max-width: 480px; }
+
+        .pro-perks { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+        .pro-perks li { display: flex; align-items: center; gap: 10px; font-size: 15px; color: #ddd; }
+        .pro-perks li::before { content: "✓"; color: var(--accent); font-weight: 700; font-size: 14px; }
+
+        .pro-cta-wrap { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+        .pro-price { font-size: 36px; font-weight: 700; letter-spacing: -1px; }
+        .pro-price-sub { font-size: 12px; color: #666; text-align: center; }
+
+        .btn-pro {
+            display: inline-block; background: var(--accent); color: #fff;
+            font-size: 15px; font-weight: 700; padding: 14px 28px;
+            border-radius: 980px; white-space: nowrap;
+            transition: background 0.15s;
+        }
+        .btn-pro:hover { background: var(--accent-dark); }
+
+        /* ── REVIEWS ── */
+        .reviews { background: var(--gray-1); border-top: 1px solid var(--gray-2); padding: 80px 28px; }
+
+        .reviews-inner { max-width: var(--max-w); margin: 0 auto; }
+
+        .reviews-header { margin-bottom: 40px; }
+
+        .stars { color: #f59e0b; font-size: 18px; letter-spacing: 2px; margin-bottom: 6px; }
+
+        .reviews-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+
+        .review-card {
+            background: #fff; border: 1px solid var(--gray-2);
+            border-radius: 18px; padding: 22px 22px;
+        }
+
+        .review-stars { color: #f59e0b; font-size: 13px; letter-spacing: 1px; margin-bottom: 10px; }
+        .review-text { font-size: 14px; color: #333; line-height: 1.6; margin-bottom: 14px; }
+        .review-author { font-size: 12px; color: var(--gray-3); font-weight: 600; }
+
+        /* ── DOWNLOAD CTA ── */
+        .download-cta {
+            max-width: var(--max-w); margin: 0 auto;
+            padding: 96px 28px; text-align: center;
+        }
+
+        .download-cta h2 { font-size: 44px; font-weight: 700; letter-spacing: -2px; line-height: 1.1; margin-bottom: 16px; }
+        .download-cta p { font-size: 18px; color: #555; margin-bottom: 40px; max-width: 460px; margin-left: auto; margin-right: auto; }
+
+        .app-store-badge {
+            display: inline-block;
+            background: var(--black); color: #fff;
+            font-size: 15px; font-weight: 600;
+            padding: 14px 28px; border-radius: 980px;
+            transition: background 0.15s;
+        }
+        .app-store-badge:hover { background: #333; }
+
+        /* App Store SVG badge — swap href to real App Store link when live */
+        .badge-wrap { display: flex; justify-content: center; margin-bottom: 16px; }
+        .badge-placeholder {
+            display: inline-flex; align-items: center; gap: 10px;
+            background: var(--black); color: #fff;
+            font-size: 16px; font-weight: 600;
+            padding: 14px 28px; border-radius: 16px;
+            opacity: 0.4; cursor: default;
+        }
+        .badge-placeholder-note { font-size: 13px; color: var(--gray-3); }
+
+        /* ── FOOTER ── */
+        footer { border-top: 1px solid var(--gray-2); padding: 32px 28px; }
+
+        .footer-inner {
+            max-width: var(--max-w); margin: 0 auto;
+            display: flex; align-items: center; justify-content: space-between;
+            flex-wrap: wrap; gap: 16px;
+        }
+
+        .footer-brand { display: flex; align-items: center; gap: 10px; }
+        .footer-icon { width: 24px; height: 24px; border-radius: 6px; overflow: hidden; }
+        .footer-icon img { width: 100%; height: 100%; }
+        .footer-name { font-size: 14px; font-weight: 700; }
+
+        .footer-links { display: flex; gap: 24px; list-style: none; flex-wrap: wrap; }
+        .footer-links a { font-size: 13px; color: var(--gray-3); transition: color 0.15s; }
+        .footer-links a:hover { color: var(--black); }
+
+        /* ── DARK MODE ── */
+        @media (prefers-color-scheme: dark) {
+            body { background: #111; color: #f0f0f0; }
+            nav { background: rgba(17,17,17,0.92); border-color: #222; }
+            .nav-name { color: #f0f0f0; }
+            .nav-links a { color: #555; }
+            .nav-links a:hover { color: #f0f0f0; }
+            h1, .section-title, .step-title, .feature-title { color: #f0f0f0; }
+            .hero-sub, .step-desc, .feature-desc { color: #888; }
+            .phone-frame, .screenshot-card, .feature-card, .review-card { background: #1c1c1e; border-color: #2a2a2a; }
+            .screenshot-card .ss-image { background: #222; }
+            .strip { background: #161616; border-color: #222; }
+            .strip-text { color: #f0f0f0; }
+            .screenshots-section { background: #141414; border-color: #222; }
+            .features-grid .feature-card { border-color: #2a2a2a; }
+            .btn-primary { background: #f0f0f0; color: #111; }
+            .btn-primary:hover { background: #ddd; }
+            .reviews { background: #141414; border-color: #222; }
+            .review-card { background: #1c1c1e; border-color: #2a2a2a; }
+            .review-text { color: #bbb; }
+            footer { border-color: #222; }
+            .footer-links a { color: #555; }
+            .footer-links a:hover { color: #f0f0f0; }
+            .download-cta p { color: #888; }
+        }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 860px) {
+            .hero { grid-template-columns: 1fr; gap: 48px; padding: 56px 28px 48px; }
+            .hero-visual { order: -1; }
+            h1 { font-size: 40px; }
+            .steps { grid-template-columns: 1fr 1fr; gap: 24px; }
+            .features-grid { grid-template-columns: 1fr 1fr; }
+            .reviews-grid { grid-template-columns: 1fr; }
+            .pro-card { grid-template-columns: 1fr; }
+            .pro-cta-wrap { flex-direction: row; align-items: center; }
+        }
+
+        @media (max-width: 640px) {
+            h1 { font-size: 34px; letter-spacing: -1.5px; }
+            .section-title { font-size: 28px; }
+            .steps { grid-template-columns: 1fr; }
+            .features-grid { grid-template-columns: 1fr; }
+            .pro-card { padding: 36px 28px; }
+            .strip-inner { gap: 24px; }
+            .footer-inner { flex-direction: column; align-items: flex-start; }
+            .nav-links .nav-links-desktop { display: none; }
+        }
+
+        /* ── LIGHTBOX ── */
+        .lightbox {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.88);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+        }
+        .lightbox.open { display: flex; }
+        .lightbox img {
+            max-width: 100%;
+            max-height: 90vh;
+            border-radius: 24px;
+            box-shadow: 0 40px 100px rgba(0,0,0,0.5);
+            object-fit: contain;
+        }
+        .lightbox-close {
+            position: absolute;
+            top: 20px;
+            right: 24px;
+            background: rgba(255,255,255,0.15);
+            border: none;
+            color: #fff;
+            font-size: 24px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.15s;
+        }
+        .lightbox-close:hover { background: rgba(255,255,255,0.25); }
+        .screenshot-card { cursor: pointer; }
+        .phone-frame { cursor: pointer; }
+    </style>
+</head>
+<body>
+
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+    <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+    <img id="lightboxImg" src="" alt="">
+</div>
+
+<!-- ── NAV ── -->
+<nav>
+    <div class="nav-inner">
+        <div class="nav-brand">
+            <div class="nav-icon"><img src="tabcut_icon.png" alt="TabCut"></div>
+            <span class="nav-name">TabCut</span>
+        </div>
+        <div class="nav-links">
+            <a href="#how-it-works" class="nav-links-desktop">How it works</a>
+            <a href="#features" class="nav-links-desktop">Features</a>
+            <a href="faq.html" class="nav-links-desktop">FAQ</a>
+            <a href="support.html" class="nav-links-desktop">Support</a>
+            <a href="privacy.html" class="nav-links-desktop">Privacy</a>
+            <a href="../index.html" class="nav-links-desktop" style="color: var(--gray-3)">Newton Labs</a>
+            <!-- swap # for App Store link when live -->
+            <a href="#download" class="nav-cta">Download Free</a>
+        </div>
+    </div>
+</nav>
+
+<!-- ── HERO ── -->
+<div class="hero">
+    <div class="hero-text">
+        <span class="hero-eyebrow">Bill Splitting for iPhone</span>
+        <h1>Nobody should pay for what they didn't order.</h1>
+        <p class="hero-sub">Scan the receipt and TabCut reads every item. Assign dishes to the people who ordered them. Everyone gets an exact total — tip, tax, and all.</p>
+        <div class="hero-actions">
+            <!-- swap # for App Store link when live -->
+            <a href="#download" class="btn-primary">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                    <path d="M11.182 3.236C11.84 2.458 12.29 1.38 12.164 0.3c-0.944 0.037-2.085 0.63-2.763 1.407-0.606 0.7-1.137 1.82-0.994 2.893 1.053 0.08 2.133-0.535 2.775-1.364zM12.153 4.95c-1.528-0.09-2.83 0.867-3.557 0.867-0.738 0-1.856-0.823-3.073-0.8C3.9 5.04 2.28 6.06 1.402 7.663c-1.8 3.1-0.466 7.69 1.276 10.21 0.856 1.246 1.884 2.626 3.225 2.578 1.286-0.047 1.773-0.83 3.328-0.83 1.555 0 2.002 0.83 3.356 0.803 1.397-0.024 2.278-1.25 3.128-2.5 0.984-1.43 1.39-2.814 1.413-2.888-0.03-0.012-2.71-1.04-2.737-4.123-0.024-2.57 2.103-3.804 2.197-3.864-1.2-1.77-3.065-1.966-3.435-2z"/>
+                </svg>
+                Download on App Store
+            </a>
+            <a href="#how-it-works" class="btn-secondary">See how it works</a>
+        </div>
+        <div class="hero-meta">
+            <span class="hero-meta-item">Free to download</span>
+            <span class="hero-meta-dot"></span>
+            <span class="hero-meta-item">No account required</span>
+            <span class="hero-meta-dot"></span>
+            <span class="hero-meta-item">iPhone · iOS 17+</span>
+        </div>
+    </div>
+
+    <!-- Hero screenshots — replace .screenshot-placeholder with <img src="screenshots/..."> when ready -->
+    <div class="hero-visual">
+        <div class="phone-frame secondary" onclick="openLightbox('screenshots/hero_scan.png')">
+            <img src="screenshots/hero_scan.png" alt="TabCut receipt scanner">
+        </div>
+        <div class="phone-frame main" onclick="openLightbox('screenshots/hero_results.png')">
+            <img src="screenshots/hero_results.png" alt="TabCut per-person results">
+        </div>
+    </div>
+</div>
+
+<!-- ── STRIP ── -->
+<div class="strip">
+    <div class="strip-inner">
+        <div class="strip-item">
+            <span class="strip-icon">📷</span>
+            <span class="strip-text">Scan any receipt</span>
+        </div>
+        <div class="strip-item">
+            <span class="strip-icon">🎯</span>
+            <span class="strip-text">Item-by-item accuracy</span>
+        </div>
+        <div class="strip-item">
+            <span class="strip-icon">💸</span>
+            <span class="strip-text">Pay via Venmo, PayPal &amp; Cash App</span>
+        </div>
+        <div class="strip-item">
+            <span class="strip-icon">🔒</span>
+            <span class="strip-text">No account or Wi-Fi needed</span>
+        </div>
+    </div>
+</div>
+
+<!-- ── HOW IT WORKS ── -->
+<div class="how" id="how-it-works">
+    <div class="section-label">How it works</div>
+    <h2 class="section-title">Receipt to settled in four steps.</h2>
+
+    <div class="steps">
+        <div class="step">
+            <div class="step-number">1</div>
+            <div class="step-title">Add the items</div>
+            <p class="step-desc">Point your camera at the receipt and TabCut reads every line item in seconds — name, price, quantity. All processing happens on your iPhone; nothing is uploaded. Prefer to type? Manual entry works too.</p>
+        </div>
+        <div class="step">
+            <div class="step-number">2</div>
+            <div class="step-title">Add your group</div>
+            <p class="step-desc">Type in names or pull directly from your Contacts. Everyone at the table gets their own column from the start.</p>
+        </div>
+        <div class="step">
+            <div class="step-number">3</div>
+            <div class="step-title">Assign &amp; finalize</div>
+            <p class="step-desc">Tap to assign dishes to whoever ordered them. Split shared items across multiple people. Add tax, tip, and the venue name — then confirm and you're done.</p>
+        </div>
+        <div class="step">
+            <div class="step-number">4</div>
+            <div class="step-title">Share &amp; collect</div>
+            <p class="step-desc">TabCut generates a clean, formatted summary showing what each person owes. Share it by text or email, or tap to request payment on Venmo, PayPal, or Cash App.</p>
+        </div>
+    </div>
+</div>
+
+<!-- ── SCREENSHOTS ── -->
+<div class="screenshots-section">
+    <div class="screenshots-inner">
+        <div class="section-label">The app</div>
+        <h2 class="section-title">Designed for the table.</h2>
+    </div>
+
+    <div class="screenshots-grid">
+        <div class="screenshot-card" onclick="openLightbox('screenshots/01_scan.png')">
+            <img src="screenshots/01_scan.png" alt="Scan your receipt" class="ss-image">
+            <div class="ss-label">1 · Scan</div>
+        </div>
+        <div class="screenshot-card" onclick="openLightbox('screenshots/02_people.png')">
+            <img src="screenshots/02_people.png" alt="Add your group" class="ss-image">
+            <div class="ss-label">2 · Add People</div>
+        </div>
+        <div class="screenshot-card" onclick="openLightbox('screenshots/03_assign.png')">
+            <img src="screenshots/03_assign.png" alt="Assign items to people" class="ss-image">
+            <div class="ss-label">3 · Assign</div>
+        </div>
+        <div class="screenshot-card" onclick="openLightbox('screenshots/04_results.png')">
+            <img src="screenshots/04_results.png" alt="See everyone's total" class="ss-image">
+            <div class="ss-label">4 · Results</div>
+        </div>
+        <div class="screenshot-card" onclick="openLightbox('screenshots/05_share.png')">
+            <img src="screenshots/05_share.png" alt="Share and collect payment" class="ss-image" style="object-position: center bottom;">
+            <div class="ss-label">5 · Share</div>
+        </div>
+        <div class="screenshot-card" onclick="openLightbox('screenshots/06_summary.png')">
+            <img src="screenshots/06_summary.png" alt="Full split summary" class="ss-image">
+            <div class="ss-label">6 · Summary</div>
+        </div>
+    </div>
+</div>
+
+<!-- ── FEATURES ── -->
+<div class="features" id="features">
+    <div class="section-label">Features</div>
+    <h2 class="section-title" style="white-space: nowrap;">Everything you need at the table.</h2>
+
+    <div class="features-grid">
+        <div class="feature-card">
+            <div class="feature-icon">👥</div>
+            <div class="feature-title">Add your group</div>
+            <p class="feature-desc">Type names directly or import from your Contacts. Each person gets their own running total as items are assigned — no confusion at the end.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">📷</div>
+            <div class="feature-title">Receipt Scanner</div>
+            <p class="feature-desc">Camera-powered OCR reads your receipt instantly. Works on crumpled paper, dim lighting, and long itemized bills. Prefer to type? Add items manually with the built-in keyboard entry.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">✂️</div>
+            <div class="feature-title">Item-by-item splitting</div>
+            <p class="feature-desc">Assign each dish to the person who ordered it. No more rounding errors or awkward "can you cover the extra $2" conversations.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">🤝</div>
+            <div class="feature-title">Split shared items</div>
+            <p class="feature-desc">Shared appetizers and bottles split evenly across however many people ordered them — one tap per person.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">💸</div>
+            <div class="feature-title">Share &amp; collect payment</div>
+            <p class="feature-desc">Send each person's total by text or email, or tap to open a payment request in Venmo, PayPal, or Cash App with the amount pre-filled.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">🕐</div>
+            <div class="feature-title">Split History</div>
+            <p class="feature-desc">Every split is saved. Browse past restaurant bills, see who was there, and reference old totals anytime.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">🔁</div>
+            <div class="feature-title">Repeat a split</div>
+            <p class="feature-desc">Go to the same spot every week? Start a new split from a previous one — same people, same structure, new amounts.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">🔒</div>
+            <div class="feature-title">Processed on your iPhone</div>
+            <p class="feature-desc">Receipt scanning happens entirely on-device using Apple's built-in Vision framework. Your receipt photos are never uploaded to a server — not ours, not anyone's.</p>
+        </div>
+    </div>
+</div>
+
+<!-- ── PRO ── -->
+<div class="pro-section">
+    <div class="pro-card">
+        <div>
+            <span class="pro-badge">TabCut Pro</span>
+            <div class="pro-title">Unlimited splits.<br>One price. Forever.</div>
+            <p class="pro-desc">The free version covers your first few splits to try the app. Upgrade once and TabCut Pro is yours with no subscription, no renewals, no catches.</p>
+            <ul class="pro-perks">
+                <li>Unlimited splits</li>
+                <li>Full split history</li>
+                <li>Repeat split from history</li>
+                <li>One-time purchase — no subscription</li>
+            </ul>
+        </div>
+        <div class="pro-cta-wrap">
+            <div>
+                <div class="pro-price">$4.99</div>
+                <div class="pro-price-sub">one-time · unlocks everything</div>
+            </div>
+            <!-- swap # for App Store link when live -->
+            <a href="#download" class="btn-pro">Get TabCut Pro</a>
+        </div>
+    </div>
+</div>
+
+<!-- ── REVIEWS ── (commented out — uncomment and replace placeholder text with real App Store reviews once live)
+<div class="reviews">
+    <div class="reviews-inner">
+        <div class="reviews-header">
+            <div class="stars">★★★★★</div>
+            <div class="section-label" style="margin-bottom:0">App Store Reviews</div>
+        </div>
+        <div class="reviews-grid">
+            <div class="review-card">
+                <div class="review-stars">★★★★★</div>
+                <p class="review-text">"[Review quote here]"</p>
+                <div class="review-author">— [App Store username]</div>
+            </div>
+            <div class="review-card">
+                <div class="review-stars">★★★★★</div>
+                <p class="review-text">"[Review quote here]"</p>
+                <div class="review-author">— [App Store username]</div>
+            </div>
+            <div class="review-card">
+                <div class="review-stars">★★★★★</div>
+                <p class="review-text">"[Review quote here]"</p>
+                <div class="review-author">— [App Store username]</div>
+            </div>
+        </div>
+    </div>
+</div>
+──>
+
+<!-- ── DOWNLOAD ── -->
+<div class="download-cta" id="download">
+    <h2>Great meals.<br>Clean tabs.</h2>
+    <p>Free to download. No account. No subscription. Start splitting in under a minute.</p>
+    <div class="badge-wrap">
+        <!-- Replace badge-placeholder with real App Store badge img/link when live:
+             <a href="https://apps.apple.com/app/tabcut/id[APP_STORE_ID]">
+               <img src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/en-us?size=250x83" alt="Download on the App Store" height="48">
+             </a>
+        -->
+        <div class="badge-placeholder">
+            <svg width="18" height="18" viewBox="0 0 16 16" fill="currentColor"><path d="M11.182 3.236C11.84 2.458 12.29 1.38 12.164 0.3c-0.944 0.037-2.085 0.63-2.763 1.407-0.606 0.7-1.137 1.82-0.994 2.893 1.053 0.08 2.133-0.535 2.775-1.364zM12.153 4.95c-1.528-0.09-2.83 0.867-3.557 0.867-0.738 0-1.856-0.823-3.073-0.8C3.9 5.04 2.28 6.06 1.402 7.663c-1.8 3.1-0.466 7.69 1.276 10.21 0.856 1.246 1.884 2.626 3.225 2.578 1.286-0.047 1.773-0.83 3.328-0.83 1.555 0 2.002 0.83 3.356 0.803 1.397-0.024 2.278-1.25 3.128-2.5 0.984-1.43 1.39-2.814 1.413-2.888-0.03-0.012-2.71-1.04-2.737-4.123-0.024-2.57 2.103-3.804 2.197-3.864-1.2-1.77-3.065-1.966-3.435-2z"/></svg>
+            Coming to App Store
+        </div>
+    </div>
+    <div class="badge-placeholder-note">iPhone · iOS 17 and later · Free with TabCut Pro upgrade</div>
+</div>
+
+<!-- ── GO-LIVE CHECKLIST ──────────────────────────────────────────────────────
+     When TabCut is approved on the App Store, do all of the following:
+     1. Replace every href="#download" with the real App Store URL
+     2. In #download section: remove badge-placeholder div, uncomment the real <a><img> badge
+     3. Uncomment the reviews section and fill in real App Store quotes + usernames
+     4. In newtonlabs-web/index.html: change TabCut app-badge class "soon" → "live"
+        and update badge text to "Live on App Store"
+─────────────────────────────────────────────────────────────────────────── -->
+
+<!-- ── FOOTER ── -->
+<footer>
+    <div class="footer-inner">
+        <div class="footer-brand">
+            <div class="footer-icon"><img src="tabcut_icon.png" alt="TabCut"></div>
+            <span class="footer-name">TabCut</span>
+        </div>
+        <ul class="footer-links">
+            <li><a href="faq.html">FAQ</a></li>
+            <li><a href="support.html">Support</a></li>
+            <li><a href="privacy.html">Privacy</a></li>
+            <li><a href="../index.html">Newton Labs</a></li>
+        </ul>
+    </div>
+</footer>
+
+<script>
+    function openLightbox(src) {
+        document.getElementById('lightboxImg').src = src;
+        document.getElementById('lightbox').classList.add('open');
+        document.body.style.overflow = 'hidden';
+    }
+    function closeLightbox() {
+        document.getElementById('lightbox').classList.remove('open');
+        document.body.style.overflow = '';
+    }
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') closeLightbox();
+    });
+</script>
+
+</body>
+</html>
