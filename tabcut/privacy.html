@@ -81,6 +81,46 @@
         .footer-links a { font-size: 13px; color: var(--gray-3); transition: color 0.15s; }
         .footer-links a:hover { color: var(--black); }
 
+        /* ── HAMBURGER / MOBILE MENU ── */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            padding: 4px;
+            background: none;
+            border: none;
+        }
+        .hamburger span {
+            display: block;
+            width: 22px;
+            height: 2px;
+            background: var(--black);
+            border-radius: 2px;
+            transition: all 0.25s;
+        }
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: var(--nav-h);
+            left: 0; right: 0;
+            background: #fff;
+            border-bottom: 1px solid var(--gray-2);
+            padding: 0 28px 16px;
+            z-index: 99;
+            flex-direction: column;
+        }
+        .mobile-menu.open { display: flex; }
+        .mobile-menu a {
+            display: block;
+            padding: 14px 0;
+            font-size: 17px;
+            border-bottom: 1px solid var(--gray-2);
+            color: var(--black);
+            text-decoration: none;
+        }
+        .mobile-menu a:last-child { border-bottom: none; }
+
         @media (prefers-color-scheme: dark) {
             body { background: #111; color: #f0f0f0; }
             nav { background: rgba(17,17,17,0.92); border-color: #2a2a2a; }
@@ -94,6 +134,14 @@
             footer { border-color: #2a2a2a; }
             .footer-copy, .footer-links a { color: #555; }
             .footer-links a:hover { color: #f0f0f0; }
+            .hamburger span { background: #f0f0f0; }
+            .mobile-menu { background: #111; border-color: #2a2a2a; }
+            .mobile-menu a { color: #f0f0f0; border-color: #2a2a2a; }
+        }
+
+        @media (max-width: 640px) {
+            .nav-links-desktop { display: none; }
+            .hamburger { display: flex; }
         }
 
         @media (max-width: 540px) { .footer-inner { flex-direction: column; align-items: flex-start; gap: 16px; } }
@@ -108,16 +156,29 @@
             <span class="nav-brand-name">TabCut</span>
         </a>
         <div class="nav-links">
-            <a href="index.html#how-it-works">How it works</a>
-            <a href="index.html#features">Features</a>
-            <a href="faq.html">FAQ</a>
-            <a href="support.html">Support</a>
-            <a href="privacy.html" class="active">Privacy</a>
-            <a href="../index.html">Newton Labs</a>
+            <a href="index.html#how-it-works" class="nav-links-desktop">How it works</a>
+            <a href="index.html#features" class="nav-links-desktop">Features</a>
+            <a href="faq.html" class="nav-links-desktop">FAQ</a>
+            <a href="support.html" class="nav-links-desktop">Support</a>
+            <a href="privacy.html" class="nav-links-desktop active">Privacy</a>
+            <a href="../index.html" class="nav-links-desktop">Newton Labs</a>
             <a href="index.html#download" class="nav-cta">Download Free</a>
         </div>
+        <button class="hamburger" aria-label="Menu" onclick="toggleMenu()">
+            <span></span><span></span><span></span>
+        </button>
     </div>
 </nav>
+
+<div class="mobile-menu" id="mobileMenu">
+    <a href="index.html#how-it-works" onclick="toggleMenu()">How it works</a>
+    <a href="index.html#features" onclick="toggleMenu()">Features</a>
+    <a href="faq.html" onclick="toggleMenu()">FAQ</a>
+    <a href="support.html" onclick="toggleMenu()">Support</a>
+    <a href="privacy.html" onclick="toggleMenu()">Privacy</a>
+    <a href="../index.html" onclick="toggleMenu()">Newton Labs</a>
+    <a href="index.html#download" onclick="toggleMenu()">Download Free</a>
+</div>
 
 <main>
     <div class="page-label">Legal</div>
@@ -188,5 +249,10 @@
     </div>
 </footer>
 
+<script>
+    function toggleMenu() {
+        document.getElementById('mobileMenu').classList.toggle('open');
+    }
+</script>
 </body>
 </html>
