@@ -73,8 +73,6 @@
             gap: 60px; align-items: center;
         }
 
-        .hero-text {}
-
         .hero-eyebrow {
             display: inline-block; font-size: 12px; font-weight: 700;
             letter-spacing: 0.08em; text-transform: uppercase;
@@ -142,18 +140,7 @@
             box-shadow: 0 16px 40px rgba(0,0,0,0.08);
         }
 
-        .phone-frame img { width: 100%; height: 100%; object-fit: cover; }
-
-        /* Screenshot placeholder — swap img src when real screenshots are ready */
-        .screenshot-placeholder {
-            width: 100%; height: 100%;
-            display: flex; flex-direction: column;
-            align-items: center; justify-content: center;
-            gap: 10px; color: var(--gray-3);
-        }
-
-        .screenshot-placeholder svg { opacity: 0.3; }
-        .screenshot-placeholder span { font-size: 11px; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; opacity: 0.5; }
+        .phone-frame img { width: 100%; height: 100%; object-fit: cover; object-position: top; }
 
         /* ── STRIP ── */
         .strip {
@@ -185,7 +172,6 @@
 
         .steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 28px; }
 
-        .step {}
         .step-number {
             width: 36px; height: 36px; border-radius: 10px;
             background: var(--accent); color: #fff;
@@ -202,7 +188,7 @@
         .screenshots-inner { max-width: var(--max-w); margin: 0 auto; padding: 0 28px; margin-bottom: 48px; }
 
         .screenshots-grid {
-            display: flex; gap: 20px;
+            display: flex; gap: 16px;
             padding: 0 28px;
             justify-content: center; flex-wrap: wrap;
         }
@@ -210,29 +196,19 @@
         .screenshot-card {
             background: #fff; border: 1px solid var(--gray-2);
             border-radius: 28px; overflow: hidden;
-            width: 180px; flex-shrink: 0;
+            width: 160px; flex-shrink: 0;
             box-shadow: 0 8px 24px rgba(0,0,0,0.06);
-        }
-
-        .screenshot-card .ss-image {
-            height: 320px; background: var(--gray-1);
-            display: flex; flex-direction: column;
-            align-items: center; justify-content: center;
-            gap: 10px; color: var(--gray-3);
-            font-size: 11px; font-weight: 600;
-            letter-spacing: 0.05em; text-transform: uppercase;
+            cursor: pointer;
         }
 
         .screenshot-card img.ss-image {
-            width: 100%; height: 320px;
+            width: 100%; height: 286px;
             object-fit: cover; object-position: top;
             display: block;
         }
 
-        .screenshot-card .ss-image svg { opacity: 0.25; }
-
         .screenshot-card .ss-label {
-            padding: 12px 14px; font-size: 12px; font-weight: 600;
+            padding: 10px 14px; font-size: 12px; font-weight: 600;
             color: var(--gray-3); border-top: 1px solid var(--gray-2);
             letter-spacing: 0.02em;
         }
@@ -275,9 +251,16 @@
         .pro-perks li { display: flex; align-items: center; gap: 10px; font-size: 15px; color: #ddd; }
         .pro-perks li::before { content: "✓"; color: var(--accent); font-weight: 700; font-size: 14px; }
 
-        .pro-cta-wrap { display: flex; flex-direction: column; align-items: center; gap: 10px; }
-        .pro-price { font-size: 36px; font-weight: 700; letter-spacing: -1px; }
-        .pro-price-sub { font-size: 12px; color: #666; text-align: center; }
+        .pro-cta-wrap { display: flex; flex-direction: column; align-items: center; gap: 16px; }
+
+        .pro-purchase-label {
+            font-size: 15px; font-weight: 700; color: #fff;
+            text-align: center; line-height: 1.3;
+        }
+        .pro-purchase-sub {
+            font-size: 12px; color: #666;
+            text-align: center; margin-top: 4px;
+        }
 
         .btn-pro {
             display: inline-block; background: var(--accent); color: #fff;
@@ -289,20 +272,14 @@
 
         /* ── REVIEWS ── */
         .reviews { background: var(--gray-1); border-top: 1px solid var(--gray-2); padding: 80px 28px; }
-
         .reviews-inner { max-width: var(--max-w); margin: 0 auto; }
-
         .reviews-header { margin-bottom: 40px; }
-
         .stars { color: #f59e0b; font-size: 18px; letter-spacing: 2px; margin-bottom: 6px; }
-
         .reviews-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
-
         .review-card {
             background: #fff; border: 1px solid var(--gray-2);
             border-radius: 18px; padding: 22px 22px;
         }
-
         .review-stars { color: #f59e0b; font-size: 13px; letter-spacing: 1px; margin-bottom: 10px; }
         .review-text { font-size: 14px; color: #333; line-height: 1.6; margin-bottom: 14px; }
         .review-author { font-size: 12px; color: var(--gray-3); font-weight: 600; }
@@ -316,82 +293,37 @@
         .download-cta h2 { font-size: 44px; font-weight: 700; letter-spacing: -2px; line-height: 1.1; margin-bottom: 16px; }
         .download-cta p { font-size: 18px; color: #555; margin-bottom: 40px; max-width: 460px; margin-left: auto; margin-right: auto; }
 
-        .app-store-badge {
-            display: inline-block;
-            background: var(--black); color: #fff;
-            font-size: 15px; font-weight: 600;
-            padding: 14px 28px; border-radius: 980px;
-            transition: background 0.15s;
-        }
-        .app-store-badge:hover { background: #333; }
-
-        /* App Store SVG badge — swap href to real App Store link when live */
         .badge-wrap { display: flex; justify-content: center; margin-bottom: 16px; }
-        .badge-placeholder {
-            display: inline-flex; align-items: center; gap: 10px;
-            background: var(--black); color: #fff;
-            font-size: 16px; font-weight: 600;
-            padding: 14px 28px; border-radius: 16px;
-            opacity: 0.4; cursor: default;
-        }
         .badge-placeholder-note { font-size: 13px; color: var(--gray-3); }
 
         /* ── FOOTER ── */
         footer { border-top: 1px solid var(--gray-2); padding: 32px 28px; }
-
         .footer-inner {
             max-width: var(--max-w); margin: 0 auto;
             display: flex; align-items: center; justify-content: space-between;
             flex-wrap: wrap; gap: 16px;
         }
-
         .footer-brand { display: flex; align-items: center; gap: 10px; }
         .footer-icon { width: 24px; height: 24px; border-radius: 6px; overflow: hidden; }
         .footer-icon img { width: 100%; height: 100%; }
         .footer-name { font-size: 14px; font-weight: 700; }
-
         .footer-links { display: flex; gap: 24px; list-style: none; flex-wrap: wrap; }
         .footer-links a { font-size: 13px; color: var(--gray-3); transition: color 0.15s; }
         .footer-links a:hover { color: var(--black); }
 
         /* ── HAMBURGER / MOBILE MENU ── */
         .hamburger {
-            display: none;
-            flex-direction: column;
-            gap: 5px;
-            cursor: pointer;
-            padding: 4px;
-            background: none;
-            border: none;
+            display: none; flex-direction: column; gap: 5px;
+            cursor: pointer; padding: 4px; background: none; border: none;
         }
-        .hamburger span {
-            display: block;
-            width: 22px;
-            height: 2px;
-            background: var(--black);
-            border-radius: 2px;
-            transition: all 0.25s;
-        }
+        .hamburger span { display: block; width: 22px; height: 2px; background: var(--black); border-radius: 2px; transition: all 0.25s; }
         .mobile-menu {
-            display: none;
-            position: fixed;
-            top: var(--nav-h);
-            left: 0; right: 0;
-            background: #fff;
-            border-bottom: 1px solid var(--gray-2);
-            padding: 16px 24px 24px;
-            z-index: 99;
-            flex-direction: column;
+            display: none; position: fixed; top: var(--nav-h); left: 0; right: 0;
+            background: #fff; border-bottom: 1px solid var(--gray-2);
+            padding: 16px 24px 24px; z-index: 99; flex-direction: column;
         }
         .mobile-menu.open { display: flex; }
-        .mobile-menu a {
-            display: block;
-            padding: 14px 0;
-            font-size: 17px;
-            border-bottom: 1px solid var(--gray-2);
-            color: var(--black);
-            text-decoration: none;
-        }
+        .mobile-menu a { display: block; padding: 14px 0; font-size: 17px; border-bottom: 1px solid var(--gray-2); color: var(--black); }
         .mobile-menu a:last-child { border-bottom: none; }
 
         /* ── DARK MODE ── */
@@ -404,7 +336,6 @@
             h1, .section-title, .step-title, .feature-title { color: #f0f0f0; }
             .hero-sub, .step-desc, .feature-desc { color: #888; }
             .phone-frame, .screenshot-card, .feature-card, .review-card { background: #1c1c1e; border-color: #2a2a2a; }
-            .screenshot-card .ss-image { background: #222; }
             .strip { background: #161616; border-color: #222; }
             .strip-text { color: #f0f0f0; }
             .screenshots-section { background: #141414; border-color: #222; }
@@ -449,43 +380,20 @@
 
         /* ── LIGHTBOX ── */
         .lightbox {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.88);
-            z-index: 1000;
-            align-items: center;
-            justify-content: center;
-            padding: 24px;
+            display: none; position: fixed; inset: 0;
+            background: rgba(0,0,0,0.88); z-index: 1000;
+            align-items: center; justify-content: center; padding: 24px;
         }
         .lightbox.open { display: flex; }
-        .lightbox img {
-            max-width: 100%;
-            max-height: 90vh;
-            border-radius: 24px;
-            box-shadow: 0 40px 100px rgba(0,0,0,0.5);
-            object-fit: contain;
-        }
+        .lightbox img { max-width: 100%; max-height: 90vh; border-radius: 24px; box-shadow: 0 40px 100px rgba(0,0,0,0.5); object-fit: contain; }
         .lightbox-close {
-            position: absolute;
-            top: 20px;
-            right: 24px;
-            background: rgba(255,255,255,0.15);
-            border: none;
-            color: #fff;
-            font-size: 24px;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            position: absolute; top: 20px; right: 24px;
+            background: rgba(255,255,255,0.15); border: none; color: #fff;
+            font-size: 24px; width: 40px; height: 40px; border-radius: 50%;
+            cursor: pointer; display: flex; align-items: center; justify-content: center;
             transition: background 0.15s;
         }
         .lightbox-close:hover { background: rgba(255,255,255,0.25); }
-        .screenshot-card { cursor: pointer; }
-        .phone-frame { cursor: pointer; }
     </style>
 </head>
 <body>
@@ -509,8 +417,7 @@
             <a href="support.html" class="nav-links-desktop">Support</a>
             <a href="privacy.html" class="nav-links-desktop">Privacy</a>
             <a href="../index.html" class="nav-links-desktop" style="color: var(--gray-3)">Newton Labs</a>
-            <!-- swap # for App Store link when live -->
-            <a href="#download" class="nav-cta">Download Free</a>
+            <a href="https://apps.apple.com/app/tabcut/id6794208279" class="nav-cta" id="nav-appstore-cta">Download Free</a>
         </div>
         <button class="hamburger" aria-label="Menu" onclick="toggleMenu()">
             <span></span><span></span><span></span>
@@ -525,7 +432,7 @@
     <a href="support.html" onclick="toggleMenu()">Support</a>
     <a href="privacy.html" onclick="toggleMenu()">Privacy</a>
     <a href="../index.html" onclick="toggleMenu()">Newton Labs</a>
-    <a href="#download" onclick="toggleMenu()">Download Free</a>
+    <a href="https://apps.apple.com/app/tabcut/id6794208279" id="mobile-appstore-cta">Download Free</a>
 </div>
 
 <!-- ── HERO ── -->
@@ -535,8 +442,7 @@
         <h1>Nobody should pay for what they didn't order.</h1>
         <p class="hero-sub">Scan the receipt and TabCut reads every item. Assign dishes to the people who ordered them. Everyone gets an exact total — tip, tax, and all.</p>
         <div class="hero-actions">
-            <!-- swap # for App Store link when live -->
-            <a href="#download" class="btn-primary">
+            <a href="https://apps.apple.com/app/tabcut/id6794208279" class="btn-primary" id="hero-appstore-btn">
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
                     <path d="M11.182 3.236C11.84 2.458 12.29 1.38 12.164 0.3c-0.944 0.037-2.085 0.63-2.763 1.407-0.606 0.7-1.137 1.82-0.994 2.893 1.053 0.08 2.133-0.535 2.775-1.364zM12.153 4.95c-1.528-0.09-2.83 0.867-3.557 0.867-0.738 0-1.856-0.823-3.073-0.8C3.9 5.04 2.28 6.06 1.402 7.663c-1.8 3.1-0.466 7.69 1.276 10.21 0.856 1.246 1.884 2.626 3.225 2.578 1.286-0.047 1.773-0.83 3.328-0.83 1.555 0 2.002 0.83 3.356 0.803 1.397-0.024 2.278-1.25 3.128-2.5 0.984-1.43 1.39-2.814 1.413-2.888-0.03-0.012-2.71-1.04-2.737-4.123-0.024-2.57 2.103-3.804 2.197-3.864-1.2-1.77-3.065-1.966-3.435-2z"/>
                 </svg>
@@ -553,13 +459,12 @@
         </div>
     </div>
 
-    <!-- Hero screenshots — replace .screenshot-placeholder with <img src="screenshots/..."> when ready -->
     <div class="hero-visual">
-        <div class="phone-frame secondary" onclick="openLightbox('screenshots/hero_scan.png')">
-            <img src="screenshots/hero_scan.png" alt="TabCut receipt scanner">
+        <div class="phone-frame secondary" onclick="openLightbox('screenshots/01_tabcut.png')">
+            <img src="screenshots/01_tabcut.png" alt="TabCut receipt scanner">
         </div>
-        <div class="phone-frame main" onclick="openLightbox('screenshots/hero_results.png')">
-            <img src="screenshots/hero_results.png" alt="TabCut per-person results">
+        <div class="phone-frame main" onclick="openLightbox('screenshots/04_tabcut.png')">
+            <img src="screenshots/04_tabcut.png" alt="TabCut per-person results">
         </div>
     </div>
 </div>
@@ -623,29 +528,37 @@
     </div>
 
     <div class="screenshots-grid">
-        <div class="screenshot-card" onclick="openLightbox('screenshots/01_scan.png')">
-            <img src="screenshots/01_scan.png" alt="Scan your receipt" class="ss-image">
+        <div class="screenshot-card" onclick="openLightbox('screenshots/01_tabcut.png')">
+            <img src="screenshots/01_tabcut.png" alt="Scan your receipt" class="ss-image">
             <div class="ss-label">1 · Scan</div>
         </div>
-        <div class="screenshot-card" onclick="openLightbox('screenshots/02_people.png')">
-            <img src="screenshots/02_people.png" alt="Add your group" class="ss-image">
-            <div class="ss-label">2 · Add People</div>
+        <div class="screenshot-card" onclick="openLightbox('screenshots/02_tabcut.png')">
+            <img src="screenshots/02_tabcut.png" alt="Assign items to people" class="ss-image">
+            <div class="ss-label">2 · Assign</div>
         </div>
-        <div class="screenshot-card" onclick="openLightbox('screenshots/03_assign.png')">
-            <img src="screenshots/03_assign.png" alt="Assign items to people" class="ss-image">
-            <div class="ss-label">3 · Assign</div>
+        <div class="screenshot-card" onclick="openLightbox('screenshots/03_tabcut.png')">
+            <img src="screenshots/03_tabcut.png" alt="Review the split" class="ss-image">
+            <div class="ss-label">3 · Summary</div>
         </div>
-        <div class="screenshot-card" onclick="openLightbox('screenshots/04_results.png')">
-            <img src="screenshots/04_results.png" alt="See everyone's total" class="ss-image">
+        <div class="screenshot-card" onclick="openLightbox('screenshots/04_tabcut.png')">
+            <img src="screenshots/04_tabcut.png" alt="See everyone's total" class="ss-image">
             <div class="ss-label">4 · Results</div>
         </div>
-        <div class="screenshot-card" onclick="openLightbox('screenshots/05_share.png')">
-            <img src="screenshots/05_share.png" alt="Share and collect payment" class="ss-image" style="object-position: center bottom;">
-            <div class="ss-label">5 · Share</div>
+        <div class="screenshot-card" onclick="openLightbox('screenshots/05_tabcut.png')">
+            <img src="screenshots/05_tabcut.png" alt="Send individual invoices" class="ss-image">
+            <div class="ss-label">5 · Invoice</div>
         </div>
-        <div class="screenshot-card" onclick="openLightbox('screenshots/06_summary.png')">
-            <img src="screenshots/06_summary.png" alt="Full split summary" class="ss-image">
-            <div class="ss-label">6 · Summary</div>
+        <div class="screenshot-card" onclick="openLightbox('screenshots/06_tabcut.png')">
+            <img src="screenshots/06_tabcut.png" alt="Group summary" class="ss-image">
+            <div class="ss-label">6 · Group Summary</div>
+        </div>
+        <div class="screenshot-card" onclick="openLightbox('screenshots/07_tabcut.png')">
+            <img src="screenshots/07_tabcut.png" alt="Track who's paid" class="ss-image">
+            <div class="ss-label">7 · Track Invoices</div>
+        </div>
+        <div class="screenshot-card" onclick="openLightbox('screenshots/08_tabcut.png')">
+            <img src="screenshots/08_tabcut.png" alt="Full split history" class="ss-image">
+            <div class="ss-label">8 · History</div>
         </div>
     </div>
 </div>
@@ -663,8 +576,8 @@
         </div>
         <div class="feature-card">
             <div class="feature-icon">📷</div>
-            <div class="feature-title">Receipt Scanner</div>
-            <p class="feature-desc">Camera-powered OCR reads your receipt instantly. Works on crumpled paper, dim lighting, and long itemized bills. Prefer to type? Add items manually with the built-in keyboard entry.</p>
+            <div class="feature-title">On-device receipt scanning</div>
+            <p class="feature-desc">Camera-powered scanning reads your receipt instantly. Works on crumpled paper, dim lighting, and long itemized bills. Prefer to type? Add items manually with the built-in keyboard entry.</p>
         </div>
         <div class="feature-card">
             <div class="feature-icon">✂️</div>
@@ -680,6 +593,11 @@
             <div class="feature-icon">💸</div>
             <div class="feature-title">Share &amp; collect payment</div>
             <p class="feature-desc">Send each person's total by text or email, or tap to open a payment request in Venmo, PayPal, or Cash App with the amount pre-filled.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">📋</div>
+            <div class="feature-title">Track who's paid</div>
+            <p class="feature-desc">Mark each person as paid and track outstanding balances. Mark all at once when the table settles up together.</p>
         </div>
         <div class="feature-card">
             <div class="feature-icon">🕐</div>
@@ -705,7 +623,7 @@
         <div>
             <span class="pro-badge">TabCut Pro</span>
             <div class="pro-title">Unlimited splits.<br>One price. Forever.</div>
-            <p class="pro-desc">The free version covers your first few splits to try the app. Upgrade once and TabCut Pro is yours with no subscription, no renewals, no catches.</p>
+            <p class="pro-desc">The free version covers your first few splits to try the app. Unlock Pro once and TabCut is yours — no subscription, no renewals, no catches.</p>
             <ul class="pro-perks">
                 <li>Unlimited splits</li>
                 <li>Full split history</li>
@@ -715,16 +633,15 @@
         </div>
         <div class="pro-cta-wrap">
             <div>
-                <div class="pro-price">$4.99</div>
-                <div class="pro-price-sub">one-time · unlocks everything</div>
+                <div class="pro-purchase-label">One-time purchase</div>
+                <div class="pro-purchase-sub">Yours forever · No subscription</div>
             </div>
-            <!-- swap # for App Store link when live -->
-            <a href="#download" class="btn-pro">Get TabCut Pro</a>
+            <a href="https://apps.apple.com/app/tabcut/id6794208279" class="btn-pro" id="pro-appstore-btn">Unlock TabCut Pro</a>
         </div>
     </div>
 </div>
 
-<!-- ── REVIEWS ── (commented out — uncomment and replace placeholder text with real App Store reviews once live)
+<!-- ── REVIEWS ── (uncomment and fill in once App Store reviews exist)
 <div class="reviews">
     <div class="reviews-inner">
         <div class="reviews-header">
@@ -750,33 +667,29 @@
         </div>
     </div>
 </div>
-──>
+-->
 
 <!-- ── DOWNLOAD ── -->
 <div class="download-cta" id="download">
     <h2>Great meals.<br>Clean tabs.</h2>
     <p>Free to download. No account. No subscription. Start splitting in under a minute.</p>
     <div class="badge-wrap">
-        <!-- Replace badge-placeholder with real App Store badge img/link when live:
-             <a href="https://apps.apple.com/app/tabcut/id[APP_STORE_ID]">
-               <img src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/en-us?size=250x83" alt="Download on the App Store" height="48">
-             </a>
-        -->
-        <div class="badge-placeholder">
-            <svg width="18" height="18" viewBox="0 0 16 16" fill="currentColor"><path d="M11.182 3.236C11.84 2.458 12.29 1.38 12.164 0.3c-0.944 0.037-2.085 0.63-2.763 1.407-0.606 0.7-1.137 1.82-0.994 2.893 1.053 0.08 2.133-0.535 2.775-1.364zM12.153 4.95c-1.528-0.09-2.83 0.867-3.557 0.867-0.738 0-1.856-0.823-3.073-0.8C3.9 5.04 2.28 6.06 1.402 7.663c-1.8 3.1-0.466 7.69 1.276 10.21 0.856 1.246 1.884 2.626 3.225 2.578 1.286-0.047 1.773-0.83 3.328-0.83 1.555 0 2.002 0.83 3.356 0.803 1.397-0.024 2.278-1.25 3.128-2.5 0.984-1.43 1.39-2.814 1.413-2.888-0.03-0.012-2.71-1.04-2.737-4.123-0.024-2.57 2.103-3.804 2.197-3.864-1.2-1.77-3.065-1.966-3.435-2z"/></svg>
-            Coming to App Store
-        </div>
+        <a href="https://apps.apple.com/app/tabcut/id6794208279" id="download-badge-link">
+            <img src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/en-us?size=250x83" alt="Download on the App Store" height="48">
+        </a>
     </div>
     <div class="badge-placeholder-note">iPhone · iOS 17 and later · Free with TabCut Pro upgrade</div>
 </div>
 
 <!-- ── GO-LIVE CHECKLIST ──────────────────────────────────────────────────────
-     When TabCut is approved on the App Store, do all of the following:
-     1. Replace every href="#download" with the real App Store URL
-     2. In #download section: remove badge-placeholder div, uncomment the real <a><img> badge
-     3. Uncomment the reviews section and fill in real App Store quotes + usernames
-     4. In newtonlabs-web/index.html: change TabCut app-badge class "soon" → "live"
+     When TabCut is approved on the App Store, do ALL of the following:
+     1. Search-replace every instance of APP_STORE_URL with the real URL
+        (appears in: nav-appstore-cta, mobile-appstore-cta, hero-appstore-btn,
+         pro-appstore-btn, download-badge-link — 5 spots total)
+     2. In newtonlabs-web/index.html: change TabCut app-badge class "soon" → "live"
         and update badge text to "Live on App Store"
+     3. Uncomment the reviews section and fill in real App Store quotes + usernames
+     4. Run `purge_prod_before_launch.sql` on PROD Supabase (wfpggpqiaunaeaaavzyo)
 ─────────────────────────────────────────────────────────────────────────── -->
 
 <!-- ── FOOTER ── -->
