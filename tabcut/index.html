@@ -5,7 +5,54 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TabCut — Bill Splitting for iPhone</title>
     <meta name="description" content="Scan the receipt. Assign items. Everyone pays exactly what they ordered. No account, no subscription, no math.">
+    <link rel="canonical" href="https://newtonlabs.app/tabcut/">
     <link rel="icon" type="image/png" href="tabcut_icon.png">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://newtonlabs.app/tabcut/">
+    <meta property="og:title" content="TabCut — Bill Splitting for iPhone">
+    <meta property="og:description" content="Scan the receipt. Assign items. Everyone pays exactly what they ordered. No account, no subscription, no math.">
+    <meta property="og:image" content="https://newtonlabs.app/tabcut/screenshots/04_tabcut.png">
+    <meta property="og:image:width" content="1170">
+    <meta property="og:image:height" content="2532">
+    <meta property="og:site_name" content="Newton Labs">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="app">
+    <meta name="twitter:title" content="TabCut — Bill Splitting for iPhone">
+    <meta name="twitter:description" content="Scan the receipt. Assign items. Everyone pays exactly what they ordered.">
+    <meta name="twitter:image" content="https://newtonlabs.app/tabcut/screenshots/04_tabcut.png">
+    <meta name="twitter:app:name:iphone" content="TabCut — Split the Bill">
+    <meta name="twitter:app:id:iphone" content="6794208279">
+
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "TabCut — Split the Bill",
+      "description": "Scan a restaurant receipt and split the bill instantly. Assign dishes to people, handle tax and tip, share individual totals, and pay via Venmo, PayPal, or Cash App.",
+      "url": "https://newtonlabs.app/tabcut/",
+      "applicationCategory": "FinanceApplication",
+      "operatingSystem": "iOS 17+",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Newton Labs",
+        "url": "https://newtonlabs.app"
+      },
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "5",
+        "ratingCount": "1"
+      }
+    }
+    </script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -156,6 +203,52 @@
         .strip-item { display: flex; align-items: center; gap: 10px; }
         .strip-icon { font-size: 26px; }
         .strip-text { font-size: 14px; font-weight: 500; color: var(--black); }
+
+        /* ── VIDEO ── */
+        .video-section {
+            background: var(--gray-1);
+            border-top: 1px solid var(--gray-2);
+            border-bottom: 1px solid var(--gray-2);
+            padding: 80px 28px;
+        }
+
+        .video-inner {
+            max-width: var(--max-w);
+            margin: 0 auto;
+        }
+
+        .video-inner .section-title {
+            margin-bottom: 48px;
+        }
+
+        .video-frame-wrap {
+            display: flex;
+            justify-content: center;
+        }
+
+        .video-phone-frame {
+            width: 300px;
+            border-radius: 44px;
+            overflow: hidden;
+            box-shadow: 0 32px 80px rgba(0,0,0,0.14), 0 4px 20px rgba(0,0,0,0.08);
+            background: #000;
+            border: 1px solid var(--gray-2);
+        }
+
+        .video-phone-frame video {
+            display: block;
+            width: 100%;
+            height: auto;
+        }
+
+        @media (max-width: 640px) {
+            .video-phone-frame { width: 240px; border-radius: 36px; }
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .video-section { background: #141414; border-color: #222; }
+            .video-phone-frame { border-color: #2a2a2a; }
+        }
 
         /* ── HOW IT WORKS ── */
         .how { max-width: var(--max-w); margin: 0 auto; padding: 96px 28px; }
@@ -487,6 +580,26 @@
         <div class="strip-item">
             <span class="strip-icon">🔒</span>
             <span class="strip-text">No account or Wi-Fi needed</span>
+        </div>
+    </div>
+</div>
+
+<!-- ── VIDEO ── -->
+<div class="video-section">
+    <div class="video-inner">
+        <div class="section-label" style="text-align:center">See it in action</div>
+        <h2 class="section-title" style="text-align:center;max-width:100%">Receipt to settled in 30 seconds.</h2>
+        <div class="video-frame-wrap">
+            <div class="video-phone-frame">
+                <video
+                    src="media/tabcut_demo.mp4"
+                    playsinline
+                    controls
+                    preload="metadata"
+                    poster="screenshots/04_tabcut.png"
+                    aria-label="TabCut demo video">
+                </video>
+            </div>
         </div>
     </div>
 </div>
