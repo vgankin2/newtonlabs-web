@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apps — Newton Labs</title>
+    <meta name="description" content="Small, focused tools for iPhone and Apple Watch from Newton Labs. TabCut splits restaurant bills. Cadence tracks your steps. More on the way.">
+    <link rel="canonical" href="https://newtonlabs.app/apps.html">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://newtonlabs.app/apps.html">
+    <meta property="og:title" content="Apps — Newton Labs">
+    <meta property="og:description" content="Small, focused tools for iPhone and Apple Watch. No ads. No clutter.">
+    <meta property="og:image" content="https://newtonlabs.app/media/nl_social_preview.png">
+    <meta property="og:site_name" content="Newton Labs">
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --coral: #FF6B35;
+            --black: #1a1a1a;
+            --gray-1: #f5f5f7;
+            --gray-2: #e8e8e8;
+            --gray-3: #888;
+            --max-w: 860px;
+            --nav-h: 60px;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+            background: #fff;
+            color: var(--black);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        a { color: inherit; text-decoration: none; }
+
+        /* ── NAV ── */
+        nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(255,255,255,0.92);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--gray-2);
+            height: var(--nav-h);
+        }
+
+        .nav-inner {
+            max-width: var(--max-w);
+            margin: 0 auto;
+            padding: 0 24px;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .nav-brand { display: flex; align-items: center; }
+        .nav-logo { height: 42px; width: auto; display: block; border-radius: 8px; }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 28px;
+        }
+
+        .nav-links a {
+            font-size: 15px;
+            font-weight: 500;
+            color: var(--gray-3);
+            transition: color 0.15s;
+        }
+        .nav-links a:hover { color: var(--black); }
+        .nav-links a.active { color: var(--black); font-weight: 600; }
+
+        /* ── HEADER ── */
+        .page-header {
+            max-width: var(--max-w);
+            margin: 0 auto;
+            padding: 72px 24px 56px;
+            border-bottom: 1px solid var(--gray-2);
+        }
+
+        .page-eyebrow {
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.09em;
+            text-transform: uppercase;
+            color: var(--coral);
+            margin-bottom: 14px;
+        }
+
+        h1 {
+            font-size: 48px;
+            font-weight: 700;
+            letter-spacing: -2px;
+            line-height: 1.06;
+            color: var(--black);
+            margin-bottom: 16px;
+        }
+
+        .page-sub {
+            font-size: 18px;
+            color: #555;
+            max-width: 480px;
+            line-height: 1.65;
+        }
+
+        /* ── APP CARDS ── */
+        .apps {
+            max-width: var(--max-w);
+            margin: 0 auto;
+            padding: 56px 24px 80px;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            align-items: start;
+        }
+
+        .app-card {
+            border: 1px solid var(--gray-2);
+            border-top: 3px solid var(--coral);
+            border-radius: 24px;
+            padding: 32px 28px 28px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+            background: #fff;
+        }
+
+        .app-card::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 100px;
+            background: linear-gradient(180deg, rgba(255,107,53,0.05) 0%, transparent 100%);
+            pointer-events: none;
+        }
+
+        .app-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 16px 48px rgba(255,107,53,0.12), 0 4px 12px rgba(0,0,0,0.06);
+            border-color: var(--coral);
+            border-top-color: var(--coral);
+        }
+
+        .app-card-inner {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .app-icon {
+            width: 68px;
+            height: 68px;
+            border-radius: 15px;
+            overflow: hidden;
+            margin-bottom: 20px;
+            flex-shrink: 0;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+        }
+
+        .app-icon img { width: 100%; height: 100%; display: block; }
+
+        .app-badge {
+            display: inline-block;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            padding: 3px 10px;
+            border-radius: 980px;
+            margin-bottom: 12px;
+        }
+
+        .app-badge.live { background: #e6f5ea; color: #0a8c26; }
+        .app-badge.soon { background: var(--gray-1); color: var(--gray-3); border: 1px solid var(--gray-2); }
+
+        .app-name {
+            font-size: 24px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            margin-bottom: 6px;
+            color: var(--black);
+        }
+
+        .app-tagline {
+            font-size: 14px;
+            color: var(--gray-3);
+            margin-bottom: 16px;
+        }
+
+        .app-desc {
+            font-size: 15px;
+            color: #444;
+            line-height: 1.65;
+            flex: 1;
+            margin-bottom: 28px;
+        }
+
+        .app-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: auto;
+        }
+
+        .app-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--black);
+            border: 1.5px solid var(--gray-2);
+            padding: 9px 16px;
+            border-radius: 980px;
+            transition: border-color 0.15s, background 0.15s;
+            white-space: nowrap;
+        }
+
+        .app-link:hover { border-color: #999; background: var(--gray-1); }
+        .app-link svg { width: 14px; height: 14px; }
+
+        .app-store-badge { display: inline-block; flex-shrink: 0; }
+        .app-store-badge img { height: 36px; width: auto; display: block; border-radius: 6px; }
+
+        /* ── COMING SOON CARD ── */
+        .app-card.coming-soon {
+            border-style: dashed;
+            border-top-style: dashed;
+            border-top-color: var(--gray-2);
+            opacity: 0.6;
+        }
+
+        .app-card.coming-soon:hover {
+            transform: none;
+            box-shadow: none;
+            border-color: var(--gray-2);
+        }
+
+        .coming-soon-icon {
+            width: 68px;
+            height: 68px;
+            border-radius: 15px;
+            background: var(--gray-1);
+            border: 2px dashed var(--gray-2);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+        }
+
+        /* ── FOOTER ── */
+        footer {
+            border-top: 1px solid var(--gray-2);
+            padding: 32px 24px;
+        }
+
+        .footer-inner {
+            max-width: var(--max-w);
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .footer-copy { font-size: 13px; color: var(--gray-3); }
+        .footer-link { font-size: 13px; color: var(--gray-3); transition: color 0.15s; }
+        .footer-link:hover { color: var(--black); }
+
+        /* ── DARK MODE ── */
+        @media (prefers-color-scheme: dark) {
+            body { background: #111; color: #f0f0f0; }
+            nav { background: rgba(17,17,17,0.92); border-color: #2a2a2a; }
+            .nav-links a { color: #555; }
+            .nav-links a:hover, .nav-links a.active { color: #f0f0f0; }
+            h1 { color: #f0f0f0; }
+            .page-header { border-color: #2a2a2a; }
+            .page-sub { color: #888; }
+            .app-card { border-color: #2a2a2a; border-top-color: var(--coral); background: #161616; }
+            .app-card:hover { border-color: var(--coral); box-shadow: 0 16px 48px rgba(255,107,53,0.18), 0 4px 12px rgba(0,0,0,0.2); }
+            .app-card.coming-soon { border-color: #2a2a2a; border-top-color: #2a2a2a; }
+            .app-card.coming-soon:hover { border-color: #2a2a2a; }
+            .coming-soon-icon { background: #1c1c1e; border-color: #333; }
+            .app-name { color: #f0f0f0; }
+            .app-desc { color: #aaa; }
+            .app-link { border-color: #333; color: #f0f0f0; }
+            .app-link:hover { background: #222; border-color: #555; }
+            footer { border-color: #2a2a2a; }
+            .footer-copy, .footer-link { color: #555; }
+            .footer-link:hover { color: #f0f0f0; }
+        }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 640px) {
+            h1 { font-size: 36px; letter-spacing: -1px; }
+            .page-header { padding: 56px 24px 40px; }
+            .apps { grid-template-columns: 1fr; padding-bottom: 64px; }
+            .footer-inner { flex-direction: column; align-items: flex-start; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav>
+    <div class="nav-inner">
+        <a href="index.html" class="nav-brand">
+            <img src="media/nl_logo_light.png" alt="Newton Labs" class="nav-logo">
+        </a>
+        <div class="nav-links">
+            <a href="apps.html" class="active">Apps</a>
+            <a href="mailto:support@newtonlabs.app">Contact</a>
+        </div>
+    </div>
+</nav>
+
+<!-- ── HEADER ── -->
+<div class="page-header">
+    <div class="page-eyebrow">The apps</div>
+    <h1>Small tools.<br>Real problems.</h1>
+    <p class="page-sub">Every app in the Newton Labs catalog starts with something that was genuinely missing. No filler, no clones — just tools worth building.</p>
+</div>
+
+<!-- ── APP CARDS ── -->
+<div class="apps">
+
+    <!-- TabCut -->
+    <div class="app-card">
+        <a href="tabcut/index.html" class="app-card-inner">
+            <div class="app-icon">
+                <img src="tabcut/tabcut_icon.png" alt="TabCut">
+            </div>
+            <span class="app-badge live">Live on App Store</span>
+            <div class="app-name">TabCut</div>
+            <div class="app-tagline">Bill Splitting for iPhone</div>
+            <p class="app-desc">Scan a receipt and split the bill in seconds. Assign items to people, handle tax and tip, share individual totals, and pay through Venmo, PayPal, or Cash App — all from one app.</p>
+        </a>
+        <div class="app-actions">
+            <a href="tabcut/index.html" class="app-link">
+                View app
+                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 8h10M9 4l4 4-4 4"/>
+                </svg>
+            </a>
+            <a href="https://apps.apple.com/app/tabcut/id6794208279" class="app-store-badge">
+                <img src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/en-us?size=250x83" alt="Download on the App Store">
+            </a>
+        </div>
+    </div>
+
+    <!-- Cadence -->
+    <div class="app-card">
+        <a href="cadence/index.html" class="app-card-inner">
+            <div class="app-icon">
+                <img src="cadence/Cadence_icon.png" alt="Cadence">
+            </div>
+            <span class="app-badge live">Live on App Store</span>
+            <div class="app-name">Cadence</div>
+            <div class="app-tagline">Step Tracker for iPhone + Apple Watch</div>
+            <p class="app-desc">Set different goals for weekdays and weekends, track steps, distance, floors, and active calories. Hourly and monthly heatmaps. Native Apple Watch app with eight complications. Free — no account, no ads.</p>
+        </a>
+        <div class="app-actions">
+            <a href="cadence/index.html" class="app-link">
+                View app
+                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 8h10M9 4l4 4-4 4"/>
+                </svg>
+            </a>
+            <a href="https://apps.apple.com/app/id6761691911" class="app-store-badge">
+                <img src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/en-us?size=250x83" alt="Download on the App Store">
+            </a>
+        </div>
+    </div>
+
+    <!-- Coming Soon -->
+    <div class="app-card coming-soon">
+        <div class="coming-soon-icon">✦</div>
+        <span class="app-badge soon">Coming soon</span>
+        <div class="app-name">Next up</div>
+        <div class="app-tagline">In development</div>
+        <p class="app-desc">Something new is in the works. Follow Newton Labs on social for updates when it's ready.</p>
+    </div>
+
+</div>
+
+<!-- ── FOOTER ── -->
+<footer>
+    <div class="footer-inner">
+        <span class="footer-copy">© 2026 Newton Labs</span>
+        <a href="mailto:support@newtonlabs.app" class="footer-link">support@newtonlabs.app</a>
+    </div>
+</footer>
+
+</body>
+</html>
