@@ -57,8 +57,8 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         :root {
-            --accent: #FF6B35;
-            --accent-dark: #e85a24;
+            --accent: #7837A1;
+            --accent-dark: #4B1F73;
             --black: #1a1a1a;
             --gray-1: #f5f5f7;
             --gray-2: #e8e8e8;
@@ -584,6 +584,10 @@
             <span class="strip-icon">🔒</span>
             <span class="strip-text">No account or Wi-Fi needed</span>
         </div>
+        <div class="strip-item">
+            <span class="strip-icon">🌍</span>
+            <span class="strip-text">Multi-currency ready</span>
+        </div>
     </div>
 </div>
 
@@ -616,17 +620,17 @@
         <div class="step">
             <div class="step-number">1</div>
             <div class="step-title">Add the items</div>
-            <p class="step-desc">Point your camera at the receipt and TabCut reads every line item in seconds — name, price, quantity. All processing happens on your iPhone; nothing is uploaded. Prefer to type? Manual entry works too.</p>
+            <p class="step-desc">Point your camera at the receipt and TabCut reads every line item in seconds — name, price, quantity. All processing happens on your iPhone; nothing is uploaded. Prefer to type or talk? Manual entry and Voice Mode both work too.</p>
         </div>
         <div class="step">
             <div class="step-number">2</div>
             <div class="step-title">Add your group</div>
-            <p class="step-desc">Type in names or pull directly from your Contacts. Everyone at the table gets their own column from the start.</p>
+            <p class="step-desc">Type in names, pull from your Contacts, or add a saved Dining Group in one tap. Everyone at the table gets their own column from the start.</p>
         </div>
         <div class="step">
             <div class="step-number">3</div>
             <div class="step-title">Assign &amp; finalize</div>
-            <p class="step-desc">Tap to assign dishes to whoever ordered them. Split shared items across multiple people. Add tax, tip, and the venue name — then confirm and you're done.</p>
+            <p class="step-desc">Tap to assign dishes to whoever ordered them, or fill in a saved Meal Template instead of starting from scratch. Split shared items across multiple people, add tax, tip, the venue name, and currency if you're abroad — then confirm and you're done.</p>
         </div>
         <div class="step">
             <div class="step-number">4</div>
@@ -653,16 +657,16 @@
             <div class="ss-label">2 · Assign</div>
         </div>
         <div class="screenshot-card" onclick="openLightbox('screenshots/03_tabcut.png')">
-            <img src="screenshots/03_tabcut.png" alt="Review the split" class="ss-image">
-            <div class="ss-label">3 · Summary</div>
+            <img src="screenshots/03_tabcut.png" alt="Save a dining group" class="ss-image">
+            <div class="ss-label">3 · Dining Groups</div>
         </div>
         <div class="screenshot-card" onclick="openLightbox('screenshots/04_tabcut.png')">
             <img src="screenshots/04_tabcut.png" alt="See everyone's total" class="ss-image">
             <div class="ss-label">4 · Results</div>
         </div>
         <div class="screenshot-card" onclick="openLightbox('screenshots/05_tabcut.png')">
-            <img src="screenshots/05_tabcut.png" alt="Send individual invoices" class="ss-image">
-            <div class="ss-label">5 · Invoice</div>
+            <img src="screenshots/05_tabcut.png" alt="Fill in a meal template" class="ss-image">
+            <div class="ss-label">5 · Meal Templates</div>
         </div>
         <div class="screenshot-card" onclick="openLightbox('screenshots/06_tabcut.png')">
             <img src="screenshots/06_tabcut.png" alt="Group summary" class="ss-image">
@@ -675,6 +679,14 @@
         <div class="screenshot-card" onclick="openLightbox('screenshots/08_tabcut.png')">
             <img src="screenshots/08_tabcut.png" alt="Full split history" class="ss-image">
             <div class="ss-label">8 · History</div>
+        </div>
+        <div class="screenshot-card" onclick="openLightbox('screenshots/09_tabcut.png')">
+            <img src="screenshots/09_tabcut.png" alt="Add people and items by voice" class="ss-image">
+            <div class="ss-label">9 · Voice Mode</div>
+        </div>
+        <div class="screenshot-card" onclick="openLightbox('screenshots/10_tabcut.png')">
+            <img src="screenshots/10_tabcut.png" alt="Unlock TabCut Pro" class="ss-image">
+            <div class="ss-label">10 · Unlock Pro</div>
         </div>
     </div>
 </div>
@@ -691,9 +703,19 @@
             <p class="feature-desc">Type names directly or import from your Contacts. Each person gets their own running total as items are assigned — no confusion at the end.</p>
         </div>
         <div class="feature-card">
+            <div class="feature-icon">⭐️</div>
+            <div class="feature-title">Dining Groups</div>
+            <p class="feature-desc">Save the people you split with most — roommates, the weekly dinner crew, a travel group — and add everyone back with a single tap next time.</p>
+        </div>
+        <div class="feature-card">
             <div class="feature-icon">📷</div>
             <div class="feature-title">On-device receipt scanning</div>
             <p class="feature-desc">Camera-powered scanning reads your receipt instantly. Works on crumpled paper, dim lighting, and long itemized bills. Prefer to type? Add items manually with the built-in keyboard entry.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">🎙️</div>
+            <div class="feature-title">Voice Mode</div>
+            <p class="feature-desc">Add people and items completely hands-free — just say what you need and TabCut builds the split as you talk.</p>
         </div>
         <div class="feature-card">
             <div class="feature-icon">✂️</div>
@@ -706,6 +728,11 @@
             <p class="feature-desc">Shared appetizers and bottles split evenly across however many people ordered them — one tap per person.</p>
         </div>
         <div class="feature-card">
+            <div class="feature-icon">📝</div>
+            <div class="feature-title">Meal Templates</div>
+            <p class="feature-desc">Order the same thing every time? Save a meal once as a template, then fill in a new split with a single tap.</p>
+        </div>
+        <div class="feature-card">
             <div class="feature-icon">💸</div>
             <div class="feature-title">Share &amp; collect payment</div>
             <p class="feature-desc">Send each person's total by text or email, or tap to open a payment request in Venmo, PayPal, or Cash App with the amount pre-filled.</p>
@@ -714,6 +741,11 @@
             <div class="feature-icon">📋</div>
             <div class="feature-title">Track who's paid</div>
             <p class="feature-desc">Mark each person as paid and track outstanding balances. Mark all at once when the table settles up together.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">🌍</div>
+            <div class="feature-title">Multi-currency support</div>
+            <p class="feature-desc">Splitting a bill abroad? Set the currency for any split so every total reads correctly, no matter where the table is.</p>
         </div>
         <div class="feature-card">
             <div class="feature-icon">🕐</div>
