@@ -275,6 +275,7 @@ footer { border-top: 1px solid var(--gray-2); padding: 32px 28px; }
         <li>The Libretto keyboard works without Full Access. It never collects what you type.</li>
         <li>Prompt Cleanup runs on your iPhone with Apple Intelligence.</li>
         <li>Your prompt is sent to an AI app only when you choose to open it there.</li>
+        <li>Libretto sends anonymous usage statistics (counts, never your content). You can turn them off in Settings.</li>
     </ul>
 
     <h2>What stays on your device</h2>
@@ -297,26 +298,23 @@ footer { border-top: 1px solid var(--gray-2); padding: 32px 28px; }
     <p>Widgets show prompt titles only. They are built on your device from your library and are not sent anywhere.</p>
 
     <h2>Information we collect</h2>
-    <p>Libretto does not collect personal information, and it does not include third-party advertising, tracking or analytics. Newton Labs does not receive your name, email address, Apple ID, location, contacts, photos or prompts through the app.</p>
-
-    <!-- LAUNCH (Supabase anonymous statistics): when the stats ship, replace the "Information we collect" section's
-         "nothing" wording and add the section below, modeled on TabCut's policy. Update the App Privacy label to match.
+    <p>Libretto does not collect personal information and contains no advertising or tracking. Newton Labs does not receive your name, email address, Apple ID, location, contacts, photos or prompts through the app. The only thing the app sends is the anonymous usage statistics described next, which you can turn off.</p>
 
     <h2>Anonymous usage statistics</h2>
-    <p>Libretto collects anonymous usage statistics to understand how the app is used and where to focus improvements. Specifically:</p>
+    <p>Libretto sends anonymous usage statistics so Newton Labs can see how the app is used and where to improve it. They are on by default, and you can turn them off at any time in Settings &rsaquo; Privacy (&ldquo;Share anonymous usage statistics&rdquo;). Specifically:</p>
     <ul>
-        <li><strong>Install identifier</strong> — a randomly generated ID created on first launch. It is not linked to your Apple ID, name, email or any personal information, and it resets on a fresh install.</li>
-        <li><strong>App events</strong> — actions such as app launch and feature usage. [FILL IN: the real event list.] The content of your prompts, titles, notes, folders or tags is never included.</li>
-        <li><strong>Device context</strong> — app version, iOS version and country code. [CONFIRM what is really sent.]</li>
+        <li><strong>Install identifier</strong> &mdash; a randomly generated ID created on first launch, and another random ID for each launch. They are not linked to your Apple ID, name, email or any personal information, and a fresh install gets a new one.</li>
+        <li><strong>Context</strong> &mdash; the app version, iOS version, country code (from your phone&rsquo;s region setting), whether Libretto Pro is unlocked, whether the Libretto keyboard is added in iOS Settings, and how many prompts, folders and tags your library holds (numbers only).</li>
+        <li><strong>App events</strong> &mdash; that the app was opened; that the first-run pages were finished; that a prompt, folder or tag was created (for a prompt: whether it was written, made from a starter, or duplicated); that a prompt was sent to one of the built-in apps (which app, for example Claude); and that the Pro screen was opened, closed, or used to buy or restore.</li>
     </ul>
-    <p>This data is sent to Supabase, a third-party service, and is deleted after [N] days. [CONFIRM retention.] You can turn it off in Settings. Newton Labs does not sell or share this data. -->
+    <p>The content of your prompts, titles, notes, folder names and tag names is never included. The keyboard and the widgets never send anything. The statistics are stored with Supabase, a third-party hosting service, and are deleted after 180 days. Newton Labs does not sell or share them, and does not use them to track you across other apps or websites.</p>
 
     <h2>What we do not collect</h2>
     <ul>
         <li>No names, email addresses or Apple ID information</li>
         <li>No prompt text, titles, notes, folders or tags</li>
         <li>No keystrokes or anything you type in other apps</li>
-        <li>No location data</li>
+        <li>No location data (the country code comes from your phone&rsquo;s region setting)</li>
         <li>No advertising identifiers (IDFA)</li>
         <li>No payment information. Purchases are processed entirely by Apple.</li>
     </ul>

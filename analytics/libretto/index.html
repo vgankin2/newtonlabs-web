@@ -1,0 +1,1329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Libretto Analytics</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --bg: #0f0f11;
+            --surface: #18181b;
+            --surface-2: #1f1f23;
+            --border: #2a2a30;
+            --text: #f0f0f0;
+            --text-2: #888;
+            --text-3: #555;
+            --accent: #FF6B35;
+            --green: #22c55e;
+            --blue: #3b82f6;
+            --purple: #a855f7;
+            --yellow: #eab308;
+            --red: #ef4444;
+            --radius: 14px;
+        }
+
+        html, body { height: 100%; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            -webkit-font-smoothing: antialiased;
+            font-size: 14px;
+        }
+
+        a { color: inherit; text-decoration: none; }
+
+        /* ── SETUP SCREEN ── */
+        #setup-screen {
+            position: fixed; inset: 0;
+            background: var(--bg);
+            display: flex; align-items: center; justify-content: center;
+            z-index: 999;
+        }
+        #setup-screen.hidden { display: none; }
+
+        .setup-card {
+            background: var(--surface); border: 1px solid var(--border);
+            border-radius: 20px; padding: 40px; width: 100%; max-width: 460px;
+        }
+
+        .setup-logo { font-size: 22px; font-weight: 700; letter-spacing: -0.4px; margin-bottom: 6px; }
+        .setup-logo span { color: var(--accent); }
+        .setup-sub { font-size: 13px; color: var(--text-2); margin-bottom: 32px; }
+        .field-label { font-size: 12px; font-weight: 600; color: var(--text-2); letter-spacing: 0.04em; text-transform: uppercase; margin-bottom: 8px; }
+        .field-group { margin-bottom: 18px; }
+
+        .field-input {
+            width: 100%; padding: 10px 14px;
+            background: var(--surface-2); border: 1px solid var(--border);
+            border-radius: 8px; color: var(--text); font-size: 14px;
+            font-family: "SF Mono", Menlo, monospace;
+            outline: none; transition: border-color 0.15s;
+        }
+        .field-input:focus { border-color: var(--accent); }
+
+        .env-toggle { display: flex; gap: 8px; margin-bottom: 24px; }
+        .env-btn {
+            flex: 1; padding: 8px 14px; border-radius: 8px;
+            border: 1px solid var(--border); background: var(--surface-2);
+            color: var(--text-2); cursor: pointer; font-size: 13px; font-weight: 500;
+            transition: all 0.15s; text-align: center;
+        }
+        .env-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+        .connect-btn {
+            width: 100%; padding: 12px;
+            background: var(--accent); border: none; border-radius: 10px;
+            color: #fff; font-size: 15px; font-weight: 600;
+            cursor: pointer; transition: opacity 0.15s;
+        }
+        .connect-btn:hover { opacity: 0.88; }
+        .connect-btn:disabled { opacity: 0.5; cursor: default; }
+        .setup-hint { margin-top: 14px; font-size: 12px; color: var(--text-3); text-align: center; }
+
+        /* ── HEADER ── */
+        header {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 16px 28px; border-bottom: 1px solid var(--border);
+            position: sticky; top: 0; z-index: 50;
+            background: rgba(15,15,17,0.9);
+            backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+        }
+
+        .header-left { display: flex; align-items: center; gap: 14px; }
+        .header-brand { font-size: 16px; font-weight: 700; letter-spacing: -0.3px; }
+        .header-brand span { color: var(--accent); }
+
+        .env-pill {
+            font-size: 11px; font-weight: 700; letter-spacing: 0.06em;
+            text-transform: uppercase; padding: 3px 10px; border-radius: 980px;
+        }
+        .env-pill.prod { background: rgba(239,68,68,0.15); color: #ef4444; border: 1px solid rgba(239,68,68,0.3); }
+        .env-pill.dev  { background: rgba(59,130,246,0.15); color: #3b82f6; border: 1px solid rgba(59,130,246,0.3); }
+
+        .header-right { display: flex; align-items: center; gap: 16px; }
+        #last-updated { font-size: 12px; color: var(--text-3); }
+
+        .refresh-btn {
+            padding: 7px 14px; border-radius: 8px;
+            background: var(--surface-2); border: 1px solid var(--border);
+            color: var(--text-2); font-size: 13px; font-weight: 500;
+            cursor: pointer; transition: all 0.15s;
+        }
+        .refresh-btn:hover { border-color: #444; color: var(--text); }
+
+        .switch-env-btn {
+            padding: 7px 14px; border-radius: 8px;
+            background: transparent; border: 1px solid var(--border);
+            color: var(--text-3); font-size: 12px;
+            cursor: pointer; transition: all 0.15s;
+        }
+        .switch-env-btn:hover { color: var(--text-2); border-color: #444; }
+
+        /* ── NAV TABS ── */
+        .section-nav {
+            display: flex; gap: 4px; padding: 16px 28px 0;
+            border-bottom: 1px solid var(--border);
+            overflow-x: auto; scrollbar-width: none;
+            position: sticky; top: 57px; z-index: 40;
+            background: var(--bg);
+        }
+        .section-nav::-webkit-scrollbar { display: none; }
+
+        .nav-tab {
+            padding: 8px 16px; border-radius: 8px 8px 0 0;
+            font-size: 12px; font-weight: 600; color: var(--text-3);
+            cursor: pointer; white-space: nowrap; border: none;
+            background: transparent; transition: all 0.15s;
+            border-bottom: 2px solid transparent; margin-bottom: -1px;
+        }
+        .nav-tab:hover { color: var(--text-2); }
+        .nav-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+        /* ── LOADING ── */
+        #loading-overlay {
+            position: fixed; inset: 0; background: rgba(15,15,17,0.7);
+            display: flex; align-items: center; justify-content: center;
+            z-index: 100; backdrop-filter: blur(4px);
+        }
+        #loading-overlay.hidden { display: none; }
+
+        .spinner {
+            width: 36px; height: 36px; border: 3px solid var(--border);
+            border-top-color: var(--accent); border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* ── MAIN ── */
+        main { padding: 28px; max-width: 1280px; margin: 0 auto; }
+
+        /* ── PAGE SECTIONS ── */
+        .page-section { display: none; }
+        .page-section.active { display: block; }
+
+        /* ── SECTION ── */
+        .section { margin-bottom: 40px; }
+        .section-title {
+            font-size: 11px; font-weight: 700; letter-spacing: 0.08em;
+            text-transform: uppercase; color: var(--text-3); margin-bottom: 16px;
+        }
+
+        /* ── STAT CARDS ── */
+        .stat-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 14px; }
+
+        .stat-card {
+            background: var(--surface); border: 1px solid var(--border);
+            border-radius: var(--radius); padding: 20px 22px;
+        }
+
+        .stat-label { font-size: 12px; color: var(--text-2); margin-bottom: 8px; font-weight: 500; }
+        .stat-value { font-size: 30px; font-weight: 700; letter-spacing: -1px; line-height: 1; }
+        .stat-sub { font-size: 12px; color: var(--text-3); margin-top: 6px; }
+
+        .stat-value.green  { color: var(--green); }
+        .stat-value.blue   { color: var(--blue); }
+        .stat-value.accent { color: var(--accent); }
+        .stat-value.purple { color: var(--purple); }
+        .stat-value.yellow { color: var(--yellow); }
+        .stat-value.red    { color: var(--red); }
+
+        /* ── CHARTS ── */
+        .chart-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+        .chart-card {
+            background: var(--surface); border: 1px solid var(--border);
+            border-radius: var(--radius); padding: 22px 24px;
+        }
+        .chart-card.full { grid-column: 1 / -1; }
+        .chart-card.third { grid-column: span 1; }
+
+        .chart-title { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+        .chart-sub   { font-size: 12px; color: var(--text-2); margin-bottom: 20px; }
+
+        .chart-wrap { position: relative; height: 200px; }
+        .chart-wrap.tall { height: 260px; }
+
+        /* ── TABLE ── */
+        .table-card {
+            background: var(--surface); border: 1px solid var(--border);
+            border-radius: var(--radius); overflow: hidden;
+        }
+        .table-header { padding: 18px 22px 14px; }
+        .table-header .chart-title { margin-bottom: 2px; }
+
+        table { width: 100%; border-collapse: collapse; }
+
+        thead th {
+            padding: 10px 16px; text-align: left;
+            font-size: 11px; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase;
+            color: var(--text-3); border-bottom: 1px solid var(--border); white-space: nowrap;
+        }
+
+        tbody td {
+            padding: 11px 16px; font-size: 13px; color: var(--text-2);
+            border-bottom: 1px solid rgba(42,42,48,0.5); white-space: nowrap;
+        }
+
+        tbody tr:last-child td { border-bottom: none; }
+        tbody tr:hover td { background: rgba(255,255,255,0.02); }
+
+        td.num { text-align: right; font-variant-numeric: tabular-nums; color: var(--text); }
+        td.highlight { color: var(--text); font-weight: 600; }
+
+        .badge {
+            display: inline-block; padding: 2px 8px; border-radius: 980px;
+            font-size: 11px; font-weight: 600; letter-spacing: 0.03em;
+        }
+        .badge.green  { background: rgba(34,197,94,0.15);  color: var(--green); }
+        .badge.red    { background: rgba(239,68,68,0.15);  color: var(--red); }
+        .badge.yellow { background: rgba(234,179,8,0.15);  color: var(--yellow); }
+        .badge.blue   { background: rgba(59,130,246,0.15); color: var(--blue); }
+        .badge.purple { background: rgba(168,85,247,0.15); color: var(--purple); }
+        .badge.accent { background: rgba(255,107,53,0.15); color: var(--accent); }
+        .badge.gray   { background: var(--surface-2); color: var(--text-3); }
+
+        /* ── FUNNEL BAR ── */
+        .funnel-wrap { padding: 20px 24px; }
+        .funnel-step {
+            display: flex; align-items: center; gap: 16px; margin-bottom: 14px;
+        }
+        .funnel-label { font-size: 12px; color: var(--text-2); width: 120px; flex-shrink: 0; }
+        .funnel-bar-wrap { flex: 1; background: var(--surface-2); border-radius: 4px; height: 24px; overflow: hidden; }
+        .funnel-bar { height: 100%; border-radius: 4px; transition: width 0.6s ease; display: flex; align-items: center; padding-left: 10px; }
+        .funnel-bar span { font-size: 11px; font-weight: 700; color: #fff; white-space: nowrap; }
+        .funnel-pct { font-size: 12px; color: var(--text-3); width: 48px; text-align: right; flex-shrink: 0; }
+
+        /* ── EMPTY / ERROR ── */
+        .empty-row td { text-align: center; color: var(--text-3) !important; padding: 32px !important; font-style: italic; }
+
+        #error-banner {
+            background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.3);
+            border-radius: 10px; padding: 14px 18px; margin-bottom: 24px;
+            font-size: 13px; color: #ef4444; display: none;
+        }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 900px) {
+            .chart-grid { grid-template-columns: 1fr; }
+            .stat-grid  { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 640px) {
+            main { padding: 16px; }
+            header { padding: 14px 16px; }
+            .stat-grid { grid-template-columns: 1fr 1fr; }
+            .section-nav { padding: 12px 16px 0; }
+        }
+
+        /* ── LIBRETTO ADDITIONS ── */
+        .noindex-note { display: none; }
+        .field-input.plain { font-family: inherit; }
+        .login-error { margin-top: 14px; font-size: 12px; color: var(--red); text-align: center; min-height: 16px; }
+        .signout-btn {
+            padding: 7px 14px; border-radius: 8px;
+            background: transparent; border: 1px solid var(--border);
+            color: var(--text-3); font-size: 12px; cursor: pointer; transition: all 0.15s;
+        }
+        .signout-btn:hover { color: var(--text-2); border-color: #444; }
+        .range-toggle { display: inline-flex; gap: 6px; margin-bottom: 14px; }
+        .range-btn {
+            padding: 4px 12px; border-radius: 980px; border: 1px solid var(--border);
+            background: var(--surface-2); color: var(--text-3); font-size: 12px; font-weight: 600; cursor: pointer;
+        }
+        .range-btn.active { color: var(--accent); border-color: var(--accent); }
+        .note {
+            font-size: 12px; color: var(--text-3); line-height: 1.5; margin-top: 12px;
+        }
+        .funnel-count { font-size: 12px; color: var(--text-2); width: 56px; text-align: right; flex-shrink: 0; font-variant-numeric: tabular-nums; }
+        .funnel-label { width: 150px; }
+        .chart-wrap.short { height: 160px; }
+        .empty-note {
+            background: var(--surface); border: 1px dashed var(--border); border-radius: var(--radius);
+            padding: 22px 24px; color: var(--text-2); font-size: 13px; line-height: 1.6; margin-bottom: 24px; display: none;
+        }
+        .scroll-x { overflow-x: auto; }
+
+        @media (max-width: 640px) {
+            header { flex-wrap: wrap; gap: 10px; position: static; }
+            .header-right { flex-wrap: wrap; gap: 8px; }
+            #last-updated { display: none; }
+            .section-nav { position: static; }
+            .setup-card { padding: 28px 22px; }
+            .funnel-label { width: 96px; }
+            .funnel-step { gap: 10px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ── SIGN-IN SCREEN ── -->
+<div id="setup-screen">
+    <form class="setup-card" id="login-form" autocomplete="on" onsubmit="connect(event)">
+        <div class="setup-logo">Libretto <span>Analytics</span></div>
+        <div class="setup-sub">Sign in with your Supabase login to see the numbers.</div>
+
+        <div class="field-label">Environment</div>
+        <div class="env-toggle" style="margin-bottom:20px;">
+            <button type="button" class="env-btn active" data-env="prod" onclick="selectEnv('prod')">Production</button>
+            <button type="button" class="env-btn" data-env="dev" onclick="selectEnv('dev')">Development</button>
+        </div>
+
+        <div class="field-group">
+            <div class="field-label">Project URL</div>
+            <input id="setup-url" class="field-input" type="text" placeholder="https://xxxxxxxxxxxx.supabase.co" autocomplete="off" spellcheck="false">
+        </div>
+        <div class="field-group">
+            <div class="field-label">Publishable Key</div>
+            <input id="setup-key" class="field-input" type="password" placeholder="sb_publishable_..." autocomplete="off" spellcheck="false">
+        </div>
+        <div class="field-group">
+            <div class="field-label">Email</div>
+            <input id="setup-email" class="field-input plain" type="email" name="email" placeholder="you@example.com" autocomplete="username" spellcheck="false">
+        </div>
+        <div class="field-group">
+            <div class="field-label">Password</div>
+            <input id="setup-password" class="field-input plain" type="password" name="password" autocomplete="current-password">
+        </div>
+
+        <button class="connect-btn" id="connect-btn" type="submit">Sign in →</button>
+        <div class="login-error" id="login-error"></div>
+        <div class="setup-hint">The URL, key and email are saved in this browser. Your password is sent only to Supabase, and only a refresh token is kept so you stay signed in.</div>
+    </form>
+</div>
+
+<!-- ── LOADING ── -->
+<div id="loading-overlay" class="hidden"><div class="spinner"></div></div>
+
+<!-- ── HEADER ── -->
+<header>
+    <div class="header-left">
+        <div class="header-brand">Libretto <span>Analytics</span></div>
+        <span class="env-pill" id="env-pill">—</span>
+    </div>
+    <div class="header-right">
+        <span id="last-updated"></span>
+        <button class="switch-env-btn" onclick="switchEnv()">Switch env</button>
+        <button class="signout-btn" onclick="signOut()">Sign out</button>
+        <button class="refresh-btn" onclick="loadAll()">↺ Refresh</button>
+    </div>
+</header>
+
+<!-- ── NAV TABS ── -->
+<div class="section-nav">
+    <button class="nav-tab active" onclick="showTab('overview', this)">Overview</button>
+    <button class="nav-tab" onclick="showTab('pro', this)">Pro &amp; Paywall</button>
+    <button class="nav-tab" onclick="showTab('creation', this)">Creation</button>
+    <button class="nav-tab" onclick="showTab('sends', this)">Sends</button>
+    <button class="nav-tab" onclick="showTab('installs', this)">Installs</button>
+</div>
+
+<!-- ── MAIN ── -->
+<main>
+    <div id="error-banner"></div>
+    <div class="empty-note" id="empty-note">
+        No events have arrived in this project yet. Open the app (a Debug or TestFlight build reports to Development,
+        an App Store build to Production), then press Refresh.
+    </div>
+
+    <!-- ══════════════════════════════════════════════════ OVERVIEW ══ -->
+    <div class="page-section active" id="tab-overview">
+
+        <div class="section">
+            <div class="section-title">Overview</div>
+            <div class="stat-grid">
+                <div class="stat-card">
+                    <div class="stat-label">Installs</div>
+                    <div class="stat-value blue" id="stat-installs">—</div>
+                    <div class="stat-sub">unique install IDs</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Active Last 7d</div>
+                    <div class="stat-value green" id="stat-7d">—</div>
+                    <div class="stat-sub" id="stat-7d-sub">installs with any event</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Pro</div>
+                    <div class="stat-value accent" id="stat-pro">—</div>
+                    <div class="stat-sub" id="stat-pro-sub">Pro on right now</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Hit the Free Limit</div>
+                    <div class="stat-value yellow" id="stat-limit">—</div>
+                    <div class="stat-sub">opened the paywall at 40 prompts</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Bought in Paywall</div>
+                    <div class="stat-value purple" id="stat-bought">—</div>
+                    <div class="stat-sub">excludes Family Sharing</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Keyboard Added</div>
+                    <div class="stat-value blue" id="stat-keyboard">—</div>
+                    <div class="stat-sub" id="stat-keyboard-sub">installs</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">Daily Activity</div>
+            <div class="range-toggle" data-for="daily">
+                <button class="range-btn active" onclick="setRange(30, this)">30 days</button>
+                <button class="range-btn" onclick="setRange(90, this)">90 days</button>
+            </div>
+            <div class="chart-grid">
+                <div class="chart-card full">
+                    <div class="chart-title">Daily Active Installs</div>
+                    <div class="chart-sub">Unique install IDs with any event per day (UTC)</div>
+                    <div class="chart-wrap"><canvas id="chart-dau"></canvas></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">Milestones</div>
+            <div class="table-card">
+                <div class="table-header">
+                    <div class="chart-title">How far installs get</div>
+                    <div class="chart-sub" style="margin-bottom:0">Each bar counts installs, not events, and an install can skip steps, so the bars are not a strict funnel. Percent is of all installs.</div>
+                </div>
+                <div class="funnel-wrap" id="funnel"></div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">Weekly Cohorts</div>
+            <div class="table-card scroll-x">
+                <div class="table-header">
+                    <div class="chart-title">Do installs come back?</div>
+                    <div class="chart-sub" style="margin-bottom:0">Based on the last time each install was seen. Newest week first. Greyed figures: some installs in that week are too new to have come back yet.</div>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Week</th>
+                            <th style="text-align:right">Installs</th>
+                            <th style="text-align:right">Back after 1 day</th>
+                            <th style="text-align:right">Back after 7 days</th>
+                            <th style="text-align:right">Made a Prompt</th>
+                            <th style="text-align:right">Pro</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody-cohorts">
+                        <tr class="empty-row"><td colspan="6">Loading…</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">App Version Distribution</div>
+            <div class="table-card scroll-x">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>App Version</th>
+                            <th>iOS Version</th>
+                            <th style="text-align:right">Installs</th>
+                            <th>Last Seen</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody-versions">
+                        <tr class="empty-row"><td colspan="4">Loading…</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ══════════════════════════════════════════════════ PRO & PAYWALL ══ -->
+    <div class="page-section" id="tab-pro">
+
+        <div class="section">
+            <div class="section-title">Pro</div>
+            <div class="stat-grid">
+                <div class="stat-card">
+                    <div class="stat-label">Pro Installs</div>
+                    <div class="stat-value accent" id="pro-stat-pro">—</div>
+                    <div class="stat-sub" id="pro-stat-pro-sub">of all installs</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Bought in Paywall</div>
+                    <div class="stat-value green" id="pro-stat-bought">—</div>
+                    <div class="stat-sub">saw the paywall, then bought</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Hit the Free Limit</div>
+                    <div class="stat-value yellow" id="pro-stat-limit">—</div>
+                    <div class="stat-sub">paywall opened by the 40-prompt cap</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Avg Prompts · Pro</div>
+                    <div class="stat-value blue" id="pro-stat-avg-pro">—</div>
+                    <div class="stat-sub">largest library per install</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Avg Prompts · Free</div>
+                    <div class="stat-value blue" id="pro-stat-avg-free">—</div>
+                    <div class="stat-sub">largest library per install</div>
+                </div>
+            </div>
+            <div class="note">Pro installs include Family Sharing and restored purchases, so they can be higher than “Bought in Paywall”.</div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">Which Door Opens the Paywall</div>
+            <div class="chart-grid">
+                <div class="chart-card full">
+                    <div class="chart-title">Paywall by Entry</div>
+                    <div class="chart-sub">Shown, dismissed and converted, all time</div>
+                    <div class="chart-wrap tall"><canvas id="chart-paywall"></canvas></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="table-card scroll-x">
+                <div class="table-header">
+                    <div class="chart-title">Paywall Detail</div>
+                    <div class="chart-sub" style="margin-bottom:0">One row per entry point</div>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Entry</th>
+                            <th style="text-align:right">Shown</th>
+                            <th style="text-align:right">Dismissed</th>
+                            <th style="text-align:right">Converted</th>
+                            <th style="text-align:right">Conv %</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody-paywall">
+                        <tr class="empty-row"><td colspan="5">Loading…</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">Pro vs Free</div>
+            <div class="table-card scroll-x">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Group</th>
+                            <th style="text-align:right">Installs</th>
+                            <th style="text-align:right">Avg Prompts</th>
+                            <th style="text-align:right">Avg Folders</th>
+                            <th style="text-align:right">Avg Tags</th>
+                            <th style="text-align:right">From Starters</th>
+                            <th style="text-align:right">Written</th>
+                            <th style="text-align:right">Sent</th>
+                            <th style="text-align:right">Used Starters</th>
+                            <th style="text-align:right">Keyboard</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody-segments">
+                        <tr class="empty-row"><td colspan="10">Loading…</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="note">“From Starters”, “Written” and “Sent” are averages of events per install since it began reporting.</div>
+        </div>
+
+    </div>
+
+    <!-- ══════════════════════════════════════════════════ CREATION ══ -->
+    <div class="page-section" id="tab-creation">
+
+        <div class="section">
+            <div class="section-title">Creation</div>
+            <div class="stat-grid">
+                <div class="stat-card">
+                    <div class="stat-label">Used a Starter</div>
+                    <div class="stat-value accent" id="cr-stat-starters">—</div>
+                    <div class="stat-sub" id="cr-stat-starters-sub">installs that added a starter</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Made a Folder</div>
+                    <div class="stat-value blue" id="cr-stat-folders">—</div>
+                    <div class="stat-sub" id="cr-stat-folders-sub">installs with a folder</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Made a Tag</div>
+                    <div class="stat-value purple" id="cr-stat-tags">—</div>
+                    <div class="stat-sub" id="cr-stat-tags-sub">installs with a tag</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Avg Folders</div>
+                    <div class="stat-value blue" id="cr-stat-avg-folders">—</div>
+                    <div class="stat-sub">per install</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Avg Tags</div>
+                    <div class="stat-value purple" id="cr-stat-avg-tags">—</div>
+                    <div class="stat-sub">per install</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">Prompts Created</div>
+            <div class="range-toggle" data-for="daily">
+                <button class="range-btn active" onclick="setRange(30, this)">30 days</button>
+                <button class="range-btn" onclick="setRange(90, this)">90 days</button>
+            </div>
+            <div class="chart-grid">
+                <div class="chart-card full">
+                    <div class="chart-title">Prompts Created per Day</div>
+                    <div class="chart-sub">Stacked by where the prompt came from</div>
+                    <div class="chart-wrap tall"><canvas id="chart-created"></canvas></div>
+                </div>
+                <div class="chart-card">
+                    <div class="chart-title">Library Size</div>
+                    <div class="chart-sub">Installs by largest number of prompts held. Free stops at 40.</div>
+                    <div class="chart-wrap tall"><canvas id="chart-buckets"></canvas></div>
+                </div>
+                <div class="chart-card">
+                    <div class="chart-title">Folders and Tags Created per Day</div>
+                    <div class="chart-sub">Custom folders and tags</div>
+                    <div class="chart-wrap tall"><canvas id="chart-organize"></canvas></div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ══════════════════════════════════════════════════ SENDS ══ -->
+    <div class="page-section" id="tab-sends">
+
+        <div class="section">
+            <div class="section-title">Sending Prompts</div>
+            <div class="stat-grid">
+                <div class="stat-card">
+                    <div class="stat-label">Prompts Sent</div>
+                    <div class="stat-value green" id="sd-stat-sent">—</div>
+                    <div class="stat-sub">all time</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Installs That Sent</div>
+                    <div class="stat-value blue" id="sd-stat-installs">—</div>
+                    <div class="stat-sub" id="sd-stat-installs-sub">of all installs</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Top Destination</div>
+                    <div class="stat-value accent" id="sd-stat-top" style="font-size:22px;padding-top:4px">—</div>
+                    <div class="stat-sub" id="sd-stat-top-sub">by sends</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="chart-grid">
+                <div class="chart-card">
+                    <div class="chart-title">Where Prompts Go</div>
+                    <div class="chart-sub">Sends per destination</div>
+                    <div class="chart-wrap tall"><canvas id="chart-targets"></canvas></div>
+                </div>
+                <div class="chart-card">
+                    <div class="chart-title">Sends per Day</div>
+                    <div class="chart-sub">Per day (UTC)</div>
+                    <div class="chart-wrap tall"><canvas id="chart-sends"></canvas></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="table-card scroll-x">
+                <div class="table-header">
+                    <div class="chart-title">Destinations</div>
+                    <div class="chart-sub" style="margin-bottom:0">Sends and the installs that used each</div>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Destination</th>
+                            <th style="text-align:right">Sends</th>
+                            <th style="text-align:right">Installs</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody-targets">
+                        <tr class="empty-row"><td colspan="3">Loading…</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">Countries</div>
+            <div class="table-card scroll-x">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Region setting</th>
+                            <th style="text-align:right">Installs</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody-countries">
+                        <tr class="empty-row"><td colspan="2">Loading…</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ══════════════════════════════════════════════════ INSTALLS ══ -->
+    <div class="page-section" id="tab-installs">
+
+        <div class="section">
+            <div class="section-title">Recent Installs</div>
+            <div class="table-card scroll-x">
+                <div class="table-header">
+                    <div class="chart-title">The 100 most recently active installs</div>
+                    <div class="chart-sub" style="margin-bottom:0">Random IDs, shortened to 8 characters. No names, no prompt text.</div>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Plan</th>
+                            <th>First Seen</th>
+                            <th>Last Seen</th>
+                            <th style="text-align:right">Days</th>
+                            <th style="text-align:right">Launches</th>
+                            <th style="text-align:right">Prompts</th>
+                            <th style="text-align:right">Starters</th>
+                            <th style="text-align:right">Written</th>
+                            <th style="text-align:right">Folders</th>
+                            <th style="text-align:right">Tags</th>
+                            <th style="text-align:right">Sent</th>
+                            <th>Keyboard</th>
+                            <th style="text-align:right">Paywall</th>
+                            <th>Version</th>
+                            <th>Region</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody-installs">
+                        <tr class="empty-row"><td colspan="16">Loading…</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</main>
+
+<script>
+// Libretto Analytics
+//
+// How it works: the page signs in to Supabase with your own login (email + password), then calls ONE function,
+// public.libretto_dashboard(), which only answers emails listed in analytics.dashboard_admins. The raw events table
+// is never readable from here. See Supabase/dashboard.sql in the Libretto repo.
+//
+// Everything that comes from the database is run through esc() before it is put on the page: anyone holding the
+// app's key can insert event text, so it must never be treated as markup.
+
+// ── STATE ────────────────────────────────────────────────────────────────────
+
+const STORE_PREFIX = 'libretto_analytics_';   // + prod | dev  → { url, key, email, refresh }
+const STORE_ENV    = 'libretto_analytics_env';
+
+let currentEnv = 'prod';
+let cfg        = { url: '', key: '' };
+let session    = { access: '', refresh: '', expiresAt: 0 };
+let data       = null;
+let rangeDays  = 30;
+
+function esc(v) {
+    return String(v ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+}
+
+function readStore(env) {
+    try { const s = localStorage.getItem(STORE_PREFIX + env); return s ? JSON.parse(s) : null; }
+    catch { return null; }
+}
+function writeStore(env, obj) {
+    try { localStorage.setItem(STORE_PREFIX + env, JSON.stringify(obj)); } catch { /* private mode */ }
+}
+
+// ── SIGN-IN ──────────────────────────────────────────────────────────────────
+
+function selectEnv(env) {
+    currentEnv = env;
+    document.querySelectorAll('.env-btn').forEach(b => b.classList.toggle('active', b.dataset.env === env));
+    const s = readStore(env) || {};
+    document.getElementById('setup-url').value   = s.url   || '';
+    document.getElementById('setup-key').value   = s.key   || '';
+    document.getElementById('setup-email').value = s.email || '';
+    document.getElementById('setup-password').value = '';
+    setLoginError('');
+}
+
+function setLoginError(msg) { document.getElementById('login-error').textContent = msg; }
+
+function showSetup() { document.getElementById('setup-screen').classList.remove('hidden'); }
+function hideSetup() { document.getElementById('setup-screen').classList.add('hidden'); }
+
+function switchEnv() {
+    const other = currentEnv === 'prod' ? 'dev' : 'prod';
+    const s = readStore(other);
+    selectEnv(other);
+    if (s && s.url && s.key && s.refresh) {          // already signed in there: go straight over
+        cfg = { url: s.url, key: s.key };
+        session = { access: '', refresh: s.refresh, expiresAt: 0 };
+        try { localStorage.setItem(STORE_ENV, other); } catch { /* private mode */ }
+        updateEnvPill();
+        hideSetup();
+        loadAll();
+    } else {
+        showSetup();
+    }
+}
+
+function signOut() {
+    const s = readStore(currentEnv) || {};
+    delete s.refresh;
+    writeStore(currentEnv, s);
+    session = { access: '', refresh: '', expiresAt: 0 };
+    data = null;
+    selectEnv(currentEnv);
+    showSetup();
+}
+
+async function authRequest(grant, body) {
+    const res = await fetch(`${cfg.url}/auth/v1/token?grant_type=${grant}`, {
+        method: 'POST',
+        headers: { 'apikey': cfg.key, 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+    });
+    const text = await res.text();
+    let json = {};
+    try { json = JSON.parse(text); } catch { /* not JSON */ }
+    if (!res.ok) {
+        const msg = json.error_description || json.msg || json.message || text || `HTTP ${res.status}`;
+        throw new Error(msg);
+    }
+    return json;
+}
+
+function takeSession(json) {
+    session = {
+        access: json.access_token,
+        refresh: json.refresh_token,
+        expiresAt: Date.now() + (json.expires_in || 3600) * 1000
+    };
+    const s = readStore(currentEnv) || {};
+    s.refresh = session.refresh;
+    writeStore(currentEnv, s);
+}
+
+async function connect(ev) {
+    if (ev) ev.preventDefault();
+    const url   = document.getElementById('setup-url').value.trim().replace(/\/$/, '');
+    const key   = document.getElementById('setup-key').value.trim();
+    const email = document.getElementById('setup-email').value.trim();
+    const pass  = document.getElementById('setup-password').value;
+    if (!url || !key || !email || !pass) { setLoginError('Fill in all four fields.'); return; }
+
+    const btn = document.getElementById('connect-btn');
+    btn.disabled = true; setLoginError('');
+    try {
+        cfg = { url, key };
+        const json = await authRequest('password', { email, password: pass });
+        writeStore(currentEnv, { url, key, email });
+        takeSession(json);
+        try { localStorage.setItem(STORE_ENV, currentEnv); } catch { /* private mode */ }
+        document.getElementById('setup-password').value = '';
+        hideSetup();
+        updateEnvPill();
+        await loadAll();
+    } catch (err) {
+        setLoginError(err.message);
+    }
+    btn.disabled = false;
+}
+
+async function ensureToken() {
+    if (session.access && Date.now() < session.expiresAt - 60000) return;
+    if (!session.refresh) throw new Error('Signed out');
+    const json = await authRequest('refresh_token', { refresh_token: session.refresh });
+    takeSession(json);
+}
+
+function updateEnvPill() {
+    const pill = document.getElementById('env-pill');
+    pill.textContent = currentEnv === 'prod' ? 'Production' : 'Development';
+    pill.className = 'env-pill ' + (currentEnv === 'prod' ? 'prod' : 'dev');
+}
+
+// ── TAB NAV ──────────────────────────────────────────────────────────────────
+
+function showTab(name, btn) {
+    document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+    document.getElementById('tab-' + name).classList.add('active');
+    btn.classList.add('active');
+}
+
+function setRange(days, btn) {
+    rangeDays = days;
+    document.querySelectorAll('.range-btn').forEach(b => b.classList.toggle('active', b.textContent.startsWith(String(days))));
+    if (data) renderDailyCharts(data);
+}
+
+// ── API ──────────────────────────────────────────────────────────────────────
+
+async function callDashboard(retry = true) {
+    await ensureToken();
+    const res = await fetch(`${cfg.url}/rest/v1/rpc/libretto_dashboard`, {
+        method: 'POST',
+        headers: {
+            'apikey': cfg.key,
+            'Authorization': `Bearer ${session.access}`,
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        },
+        body: '{}'
+    });
+    if (res.ok) return res.json();
+
+    const text = await res.text();
+    let j = {};
+    try { j = JSON.parse(text); } catch { /* not JSON */ }
+
+    if (res.status === 401 && retry) { session.expiresAt = 0; return callDashboard(false); }
+    if (j.code === '42501' || /not allowed/i.test(text) || res.status === 403)
+        throw new Error('This login is not on the dashboard list. Add its email to analytics.dashboard_admins in this project (see Supabase/dashboard.sql).');
+    if (j.code === 'PGRST202' || res.status === 404)
+        throw new Error('The dashboard function is missing in this project. Run Supabase/dashboard.sql in its SQL Editor.');
+    throw new Error(`${res.status} ${text}`);
+}
+
+// ── CHARTS ───────────────────────────────────────────────────────────────────
+
+const charts = {};
+
+const chartDefaults = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+        legend: { labels: { color: '#888', font: { size: 12 }, boxWidth: 12, padding: 16 } },
+        tooltip: {
+            backgroundColor: '#18181b', borderColor: '#2a2a30', borderWidth: 1,
+            titleColor: '#f0f0f0', bodyColor: '#888', padding: 12, cornerRadius: 8
+        }
+    }
+};
+
+const grid  = { color: 'rgba(255,255,255,0.04)' };
+const ticks = { color: '#555', font: { size: 11 } };
+const scalesXY        = { x: { grid, ticks }, y: { grid, ticks, beginAtZero: true } };
+const scalesXYStacked = { x: { stacked: true, grid, ticks }, y: { stacked: true, grid, ticks: { ...ticks, precision: 0 }, beginAtZero: true } };
+
+function makeChart(id, type, labels, datasets, extraOptions = {}) {
+    if (charts[id]) charts[id].destroy();
+    const ctx = document.getElementById(id).getContext('2d');
+    charts[id] = new Chart(ctx, { type, data: { labels, datasets }, options: { ...chartDefaults, ...extraOptions } });
+}
+
+// ── FORMATTERS ───────────────────────────────────────────────────────────────
+
+function fmtDay(iso) {
+    if (!iso) return '—';
+    return new Date(iso).toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' });
+}
+function fmtWeek(iso) { return iso ? `w/o ${fmtDay(iso)}` : '—'; }
+function fmtWhen(iso) {
+    if (!iso) return '—';
+    const mins = Math.round((Date.now() - new Date(iso).getTime()) / 60000);
+    if (mins < 1)    return 'just now';
+    if (mins < 60)   return `${mins} min ago`;
+    if (mins < 1440) return `${Math.round(mins / 60)} h ago`;
+    return new Date(iso).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+}
+function fmtNum(n) { return n == null ? '—' : Number(n).toLocaleString(); }
+function fmtPct(n) { return n == null ? '—' : `${n}%`; }
+function fmtAvg(n) { return n == null ? '—' : String(n); }
+function pctOf(part, whole) { return whole ? Math.round(part / whole * 1000) / 10 : null; }
+
+function convBadge(n) {
+    if (n == null) return '<span class="badge gray">—</span>';
+    const cls = n >= 5 ? 'green' : n >= 1 ? 'yellow' : 'red';
+    return `<span class="badge ${cls}">${esc(n)}%</span>`;
+}
+function yesNo(b) { return b ? '<span class="badge green">Yes</span>' : '<span class="badge gray">No</span>'; }
+function planBadge(pro) { return pro ? '<span class="badge accent">Pro</span>' : '<span class="badge gray">Free</span>'; }
+
+function emptyRow(cols, msg) { return `<tr class="empty-row"><td colspan="${cols}">${esc(msg)}</td></tr>`; }
+function setText(id, text) { document.getElementById(id).textContent = text; }
+
+// Every day in the range, oldest first, with zeros for quiet days. Day keys are UTC dates (YYYY-MM-DD).
+function dayKey(iso) { return new Date(iso).toISOString().slice(0, 10); }
+function filledDays(rows, n) {
+    const byDay = new Map(rows.map(r => [dayKey(r.day), r]));
+    const out = [];
+    const now = new Date();
+    for (let i = n - 1; i >= 0; i--) {
+        const d = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() - i));
+        const key = d.toISOString().slice(0, 10);
+        out.push({ day: key, ...(byDay.get(key) || {}) });
+    }
+    return out;
+}
+
+// ── LOAD ─────────────────────────────────────────────────────────────────────
+
+async function loadAll() {
+    setLoading(true);
+    hideError();
+    try {
+        data = await callDashboard();
+
+        const empty = !data.summary || !data.summary.installs;
+        document.getElementById('empty-note').style.display = empty ? 'block' : 'none';
+
+        renderOverview(data);
+        renderFunnel(data.funnel);
+        renderCohorts(data.cohorts || []);
+        renderVersions(data.versions || []);
+        renderPro(data);
+        renderCreation(data);
+        renderSends(data);
+        renderInstalls(data.installs || []);
+        renderDailyCharts(data);
+
+        setText('last-updated', 'Updated ' + new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }));
+    } catch (err) {
+        if (err.message === 'Signed out' || /refresh|invalid.*token|Invalid Refresh/i.test(err.message)) {
+            signOut();
+            setLoginError('Your session ended. Sign in again.');
+        } else {
+            showError('Failed to load data: ' + err.message);
+        }
+        console.error(err);
+    }
+    setLoading(false);
+}
+
+// ── OVERVIEW ─────────────────────────────────────────────────────────────────
+
+function renderOverview(d) {
+    const s = d.summary || {};
+    setText('stat-installs', fmtNum(s.installs));
+    setText('stat-7d', fmtNum(s.active_last_7_days));
+    setText('stat-7d-sub', s.installs ? `${fmtPct(pctOf(s.active_last_7_days, s.installs))} of installs` : 'installs with any event');
+    setText('stat-pro', fmtNum(s.pro_installs));
+    setText('stat-pro-sub', s.pro_percent != null ? `${s.pro_percent}% of installs` : 'Pro on right now');
+    setText('stat-limit', fmtNum(s.hit_free_limit));
+    setText('stat-bought', fmtNum(s.bought_in_paywall));
+    setText('stat-keyboard', fmtNum(s.installs_with_keyboard));
+    setText('stat-keyboard-sub', s.installs ? `${fmtPct(pctOf(s.installs_with_keyboard, s.installs))} of installs` : 'installs');
+}
+
+function renderFunnel(f) {
+    const el = document.getElementById('funnel');
+    if (!f || !f.installs) { el.innerHTML = '<div class="empty-row" style="padding:24px;text-align:center;color:var(--text-3);font-style:italic">No data yet</div>'; return; }
+    const steps = [
+        ['Installed',          f.installs,    'var(--blue)'],
+        ['Finished welcome',   f.onboarded,   'var(--blue)'],
+        ['Made a prompt',      f.created,     'var(--green)'],
+        ['Added keyboard',     f.keyboard,    'var(--green)'],
+        ['Sent a prompt',      f.sent,        'var(--green)'],
+        ['Hit free limit',     f.hit_limit,   'var(--yellow)'],
+        ['Saw the paywall',    f.saw_paywall, 'var(--yellow)'],
+        ['Pro',                f.pro,         'var(--accent)']
+    ];
+    el.innerHTML = steps.map(([label, n, color]) => {
+        const pct = pctOf(n, f.installs) ?? 0;
+        return `<div class="funnel-step">
+            <div class="funnel-label">${esc(label)}</div>
+            <div class="funnel-bar-wrap"><div class="funnel-bar" style="width:${Math.max(pct, n ? 2 : 0)}%;background:${color}"></div></div>
+            <div class="funnel-count">${fmtNum(n)}</div>
+            <div class="funnel-pct">${pct}%</div>
+        </div>`;
+    }).join('');
+}
+
+function renderCohorts(rows) {
+    const tbody = document.getElementById('tbody-cohorts');
+    if (!rows.length) { tbody.innerHTML = emptyRow(6, 'No data yet'); return; }
+    const cell = (n, of, aged) => {
+        const text = `${fmtNum(n)} <span style="color:var(--text-3)">· ${fmtPct(pctOf(n, of))}</span>`;
+        return aged ? text : `<span style="opacity:.45">${text}</span>`;
+    };
+    const DAY = 86400000;
+    tbody.innerHTML = rows.map(r => {
+        const age = Date.now() - new Date(r.week).getTime();   // from the start of that week
+        return `
+        <tr>
+            <td class="highlight">${esc(fmtWeek(r.week))}</td>
+            <td class="num">${fmtNum(r.installs)}</td>
+            <td class="num">${cell(r.back_after_1_day, r.installs, age >= 8 * DAY)}</td>
+            <td class="num">${cell(r.back_after_7_days, r.installs, age >= 14 * DAY)}</td>
+            <td class="num">${cell(r.created_a_prompt, r.installs)}</td>
+            <td class="num">${fmtNum(r.pro)}</td>
+        </tr>`;
+    }).join('');
+}
+
+function renderVersions(rows) {
+    const tbody = document.getElementById('tbody-versions');
+    if (!rows.length) { tbody.innerHTML = emptyRow(4, 'No data yet'); return; }
+    tbody.innerHTML = rows.map(r => `
+        <tr>
+            <td class="highlight">${esc(r.app_version ?? '—')}</td>
+            <td>${esc(r.ios_version ?? '—')}</td>
+            <td class="num">${fmtNum(r.installs)}</td>
+            <td>${esc(fmtWhen(r.last_seen))}</td>
+        </tr>`).join('');
+}
+
+// ── PRO & PAYWALL ────────────────────────────────────────────────────────────
+
+function renderPro(d) {
+    const s = d.summary || {};
+    setText('pro-stat-pro', fmtNum(s.pro_installs));
+    setText('pro-stat-pro-sub', s.pro_percent != null ? `${s.pro_percent}% of installs` : 'of all installs');
+    setText('pro-stat-bought', fmtNum(s.bought_in_paywall));
+    setText('pro-stat-limit', fmtNum(s.hit_free_limit));
+    setText('pro-stat-avg-pro', fmtAvg(s.avg_prompts_pro));
+    setText('pro-stat-avg-free', fmtAvg(s.avg_prompts_free));
+
+    const rows = d.paywall || [];
+    const tbody = document.getElementById('tbody-paywall');
+    tbody.innerHTML = rows.length ? rows.map(r => `
+        <tr>
+            <td class="highlight">${esc(r.entry ?? '—')}</td>
+            <td class="num">${fmtNum(r.shown)}</td>
+            <td class="num">${fmtNum(r.dismissed)}</td>
+            <td class="num">${fmtNum(r.converted)}</td>
+            <td class="num">${convBadge(r.converted_percent)}</td>
+        </tr>`).join('') : emptyRow(5, 'No paywall views yet');
+
+    makeChart('chart-paywall', 'bar', rows.map(r => r.entry ?? '—'), [
+        { label: 'Shown',     data: rows.map(r => r.shown),     backgroundColor: 'rgba(234,179,8,0.6)',  borderRadius: 4 },
+        { label: 'Dismissed', data: rows.map(r => r.dismissed), backgroundColor: 'rgba(239,68,68,0.6)',  borderRadius: 4 },
+        { label: 'Converted', data: rows.map(r => r.converted), backgroundColor: 'rgba(34,197,94,0.75)', borderRadius: 4 }
+    ], { scales: { x: { grid, ticks }, y: { grid, ticks: { ...ticks, precision: 0 }, beginAtZero: true } } });
+
+    const seg = d.segments || [];
+    const sb = document.getElementById('tbody-segments');
+    sb.innerHTML = seg.length ? seg.map(g => `
+        <tr>
+            <td class="highlight">${planBadge(g.pro)}</td>
+            <td class="num">${fmtNum(g.installs)}</td>
+            <td class="num">${fmtAvg(g.avg_prompts)}</td>
+            <td class="num">${fmtAvg(g.avg_folders)}</td>
+            <td class="num">${fmtAvg(g.avg_tags)}</td>
+            <td class="num">${fmtAvg(g.avg_from_starters)}</td>
+            <td class="num">${fmtAvg(g.avg_written)}</td>
+            <td class="num">${fmtAvg(g.avg_sent)}</td>
+            <td class="num">${fmtPct(g.starters_percent)}</td>
+            <td class="num">${fmtPct(g.keyboard_percent)}</td>
+        </tr>`).join('') : emptyRow(10, 'No data yet');
+}
+
+// ── CREATION ─────────────────────────────────────────────────────────────────
+
+function renderCreation(d) {
+    const s = d.summary || {};
+    setText('cr-stat-starters', fmtNum(s.installs_using_starters));
+    setText('cr-stat-starters-sub', s.starters_percent != null ? `${s.starters_percent}% of installs added a starter` : 'installs that added a starter');
+    setText('cr-stat-folders', fmtNum(s.installs_with_folders));
+    setText('cr-stat-folders-sub', s.installs ? `${fmtPct(pctOf(s.installs_with_folders, s.installs))} of installs` : 'installs with a folder');
+    setText('cr-stat-tags', fmtNum(s.installs_with_tags));
+    setText('cr-stat-tags-sub', s.installs ? `${fmtPct(pctOf(s.installs_with_tags, s.installs))} of installs` : 'installs with a tag');
+    setText('cr-stat-avg-folders', fmtAvg(s.avg_folders));
+    setText('cr-stat-avg-tags', fmtAvg(s.avg_tags));
+
+    const b = d.prompt_buckets || [];
+    makeChart('chart-buckets', 'bar', b.map(x => x.bucket), [
+        { label: 'Free', data: b.map(x => x.installs - x.pro), backgroundColor: 'rgba(59,130,246,0.7)', borderRadius: 4 },
+        { label: 'Pro',  data: b.map(x => x.pro),             backgroundColor: 'rgba(255,107,53,0.8)', borderRadius: 4 }
+    ], { scales: scalesXYStacked });
+}
+
+// ── SENDS ────────────────────────────────────────────────────────────────────
+
+function renderSends(d) {
+    const s = d.summary || {};
+    const targets = d.send_targets || [];
+    const totalSends = targets.reduce((a, t) => a + (t.sends || 0), 0);
+    const f = d.funnel || {};
+    setText('sd-stat-sent', fmtNum(totalSends));
+    setText('sd-stat-installs', fmtNum(f.sent));
+    setText('sd-stat-installs-sub', s.installs ? `${fmtPct(pctOf(f.sent, s.installs))} of installs` : 'of all installs');
+    const top = targets[0];
+    setText('sd-stat-top', top ? (top.target ?? '—') : '—');
+    setText('sd-stat-top-sub', top ? `${fmtNum(top.sends)} sends` : 'by sends');
+
+    const tb = document.getElementById('tbody-targets');
+    tb.innerHTML = targets.length ? targets.map(t => `
+        <tr>
+            <td class="highlight">${esc(t.target ?? '—')}</td>
+            <td class="num">${fmtNum(t.sends)}</td>
+            <td class="num">${fmtNum(t.installs)}</td>
+        </tr>`).join('') : emptyRow(3, 'No sends yet');
+
+    const palette = ['#FF6B35', '#3b82f6', '#22c55e', '#a855f7', '#eab308', '#ef4444', '#14b8a6', '#f472b6', '#94a3b8', '#64748b'];
+    makeChart('chart-targets', 'bar', targets.map(t => t.target ?? '—'), [{
+        label: 'Sends', data: targets.map(t => t.sends),
+        backgroundColor: targets.map((_, i) => palette[i % palette.length]), borderRadius: 4
+    }], { indexAxis: 'y', plugins: { ...chartDefaults.plugins, legend: { display: false } },
+          scales: { x: { grid, ticks: { ...ticks, precision: 0 }, beginAtZero: true }, y: { grid, ticks } } });
+
+    const cb = document.getElementById('tbody-countries');
+    const countries = d.countries || [];
+    cb.innerHTML = countries.length ? countries.map(c => `
+        <tr>
+            <td class="highlight">${esc(c.country)}</td>
+            <td class="num">${fmtNum(c.installs)}</td>
+        </tr>`).join('') : emptyRow(2, 'No data yet');
+}
+
+// ── DAILY CHARTS (follow the 30 / 90 day switch) ─────────────────────────────
+
+function renderDailyCharts(d) {
+    const days = filledDays(d.daily || [], rangeDays);
+    const labels = days.map(r => fmtDay(r.day));
+    const n = key => days.map(r => r[key] || 0);
+
+    makeChart('chart-dau', 'bar', labels, [{
+        label: 'Active installs', data: n('active_installs'),
+        backgroundColor: 'rgba(59,130,246,0.7)', borderRadius: 4
+    }], { scales: { x: { grid, ticks: { ...ticks, maxTicksLimit: 15 } }, y: { grid, ticks: { ...ticks, precision: 0 }, beginAtZero: true } } });
+
+    makeChart('chart-created', 'bar', labels, [
+        { label: 'Written',   data: n('written'),      backgroundColor: 'rgba(59,130,246,0.75)', borderRadius: 3 },
+        { label: 'Starters',  data: n('from_starters'), backgroundColor: 'rgba(255,107,53,0.85)', borderRadius: 3 },
+        { label: 'Duplicated', data: n('duplicated'),  backgroundColor: 'rgba(168,85,247,0.75)', borderRadius: 3 }
+    ], { scales: scalesXYStacked });
+
+    makeChart('chart-organize', 'line', labels, [
+        { label: 'Folders', data: n('folders_created'), borderColor: '#3b82f6', backgroundColor: 'rgba(59,130,246,0.15)', tension: 0.3, pointRadius: 2 },
+        { label: 'Tags',    data: n('tags_created'),    borderColor: '#a855f7', backgroundColor: 'rgba(168,85,247,0.15)', tension: 0.3, pointRadius: 2 }
+    ], { scales: { x: { grid, ticks: { ...ticks, maxTicksLimit: 10 } }, y: { grid, ticks: { ...ticks, precision: 0 }, beginAtZero: true } } });
+
+    makeChart('chart-sends', 'bar', labels, [{
+        label: 'Prompts sent', data: n('prompts_sent'),
+        backgroundColor: 'rgba(34,197,94,0.7)', borderRadius: 4
+    }], { scales: { x: { grid, ticks: { ...ticks, maxTicksLimit: 10 } }, y: { grid, ticks: { ...ticks, precision: 0 }, beginAtZero: true } } });
+}
+
+// ── INSTALLS ─────────────────────────────────────────────────────────────────
+
+function renderInstalls(rows) {
+    const tbody = document.getElementById('tbody-installs');
+    if (!rows.length) { tbody.innerHTML = emptyRow(16, 'No installs yet'); return; }
+    tbody.innerHTML = rows.map(r => `
+        <tr>
+            <td class="highlight" style="font-family:'SF Mono',Menlo,monospace">${esc(r.id)}</td>
+            <td>${planBadge(r.pro)}</td>
+            <td>${esc(fmtDay(r.first_seen))}</td>
+            <td>${esc(fmtWhen(r.last_seen))}</td>
+            <td class="num">${fmtNum(r.days_active)}</td>
+            <td class="num">${fmtNum(r.launches)}</td>
+            <td class="num">${fmtNum(r.prompts)}</td>
+            <td class="num">${fmtNum(r.from_starters)}</td>
+            <td class="num">${fmtNum(r.written)}</td>
+            <td class="num">${fmtNum(r.folders)}</td>
+            <td class="num">${fmtNum(r.tags)}</td>
+            <td class="num">${fmtNum(r.sent)}</td>
+            <td>${yesNo(r.keyboard)}</td>
+            <td class="num">${fmtNum(r.paywall_views)}</td>
+            <td>${esc(r.app_version ?? '—')}</td>
+            <td>${esc(r.country ?? '—')}</td>
+        </tr>`).join('');
+}
+
+// ── UTILS ────────────────────────────────────────────────────────────────────
+
+function setLoading(on) { document.getElementById('loading-overlay').classList.toggle('hidden', !on); }
+function showError(msg) { const el = document.getElementById('error-banner'); el.style.display = 'block'; el.textContent = msg; }
+function hideError() { document.getElementById('error-banner').style.display = 'none'; }
+
+// ── INIT ─────────────────────────────────────────────────────────────────────
+
+(async function init() {
+    let env = 'prod';
+    try { env = localStorage.getItem(STORE_ENV) || 'prod'; } catch { /* private mode */ }
+    selectEnv(env);
+    updateEnvPill();
+
+    const s = readStore(env);
+    if (s && s.url && s.key && s.refresh) {
+        cfg = { url: s.url, key: s.key };
+        session = { access: '', refresh: s.refresh, expiresAt: 0 };
+        hideSetup();
+        await loadAll();
+    }
+})();
+</script>
+</body>
+</html>
